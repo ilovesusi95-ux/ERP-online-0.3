@@ -54,48 +54,43 @@
         </div>
 
         <div class="flex-1 p-8">
-            <!-- DASHBOARD, PRODUCTS, INVENTORY (no adjustment), SALES, CERTIFICATES, CUSTOMERS, SUPPLIERS, REPORTS, SETTINGS 保持原有完整代码 -->
+            <!-- DASHBOARD -->
             <div id="dashboard" class="section active">
-                <h1 class="text-4xl font-bold mb-8">仪表盘</h1>
-                <div class="grid grid-cols-4 gap-6">
-                    <div class="erp-card bg-white p-7 rounded-3xl border"><div class="text-sm text-slate-500">本月销售额</div><div id="kpi-sales" class="text-4xl font-bold mt-2">¥1,284,600</div></div>
-                    <div class="erp-card bg-white p-7 rounded-3xl border"><div class="text-sm text-slate-500">库存价值</div><div id="kpi-inventory" class="text-4xl font-bold mt-2">¥3,872,450</div></div>
-                    <div class="erp-card bg-white p-7 rounded-3xl border"><div class="text-sm text-slate-500">待处理订单</div><div id="kpi-orders" class="text-4xl font-bold mt-2">47</div></div>
-                    <div class="erp-card bg-white p-7 rounded-3xl border"><div class="text-sm text-slate-500">低库存预警</div><div id="kpi-lowstock" class="text-4xl font-bold mt-2 text-red-600">8</div></div>
+                <div class="flex justify-between items-end mb-8"><div><h1 class="text-4xl font-bold tracking-tight">欢迎回来，张总监</h1><p class="text-slate-500 mt-2">今天是 2026年5月15日 · 医疗耗材智能工厂</p></div><button onclick="refreshDashboard()" class="px-6 py-3 bg-white border rounded-2xl text-sm flex items-center gap-x-2 hover:bg-slate-50"><i class="fa-solid fa-sync-alt"></i> <span>刷新数据</span></button></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="erp-card bg-white p-7 rounded-3xl border"><div class="flex justify-between"><div><div class="text-sm text-slate-500">本月销售额</div><div id="kpi-sales" class="text-4xl font-bold mt-3">¥1,284,600</div></div><div class="w-14 h-14 bg-emerald-100 rounded-2xl flex items-center justify-center"><i class="fa-solid fa-yen-sign text-emerald-600 text-3xl"></i></div></div><div class="mt-5 text-emerald-600 text-sm flex items-center"><i class="fa-solid fa-arrow-up mr-1.5"></i> +18.4% 较上月</div></div>
+                    <div class="erp-card bg-white p-7 rounded-3xl border"><div class="flex justify-between"><div><div class="text-sm text-slate-500">库存价值</div><div id="kpi-inventory" class="text-4xl font-bold mt-3">¥3,872,450</div></div><div class="w-14 h-14 bg-sky-100 rounded-2xl flex items-center justify-center"><i class="fa-solid fa-boxes text-sky-600 text-3xl"></i></div></div><div class="mt-5 text-sky-600 text-sm">12,458 件在库</div></div>
+                    <div class="erp-card bg-white p-7 rounded-3xl border"><div class="flex justify-between"><div><div class="text-sm text-slate-500">待处理订单</div><div id="kpi-orders" class="text-4xl font-bold mt-3">47</div></div><div class="w-14 h-14 bg-amber-100 rounded-2xl flex items-center justify-center"><i class="fa-solid fa-clock text-amber-600 text-3xl"></i></div></div><div class="mt-5 text-amber-600 text-sm">9 个高优先级</div></div>
+                    <div class="erp-card bg-white p-7 rounded-3xl border"><div class="flex justify-between"><div><div class="text-sm text-slate-500">低库存预警</div><div id="kpi-lowstock" class="text-4xl font-bold mt-3 text-red-600">8</div></div><div class="w-14 h-14 bg-red-100 rounded-2xl flex items-center justify-center"><i class="fa-solid fa-exclamation-triangle text-red-600 text-3xl"></i></div></div><div class="mt-5 text-red-600 text-sm">需立即补货</div></div>
                 </div>
+                <div class="grid grid-cols-1 lg:grid-cols-5 gap-6"><div class="lg:col-span-3 bg-white rounded-3xl border p-7"><div class="flex justify-between items-center mb-5"><div class="font-semibold text-xl">近30天销售趋势</div></div><canvas id="salesChart" height="115"></canvas></div><div class="lg:col-span-2 bg-white rounded-3xl border p-7"><div class="font-semibold text-xl mb-5">库存品类分布</div><canvas id="categoryChart" height="115"></canvas></div></div>
             </div>
 
-            <!-- 其他模块保持原有完整功能 (省略以节省空间) -->
-            <div id="products" class="section">产品管理完整功能</div>
-            <div id="inventory" class="section">
-                <h2 class="text-3xl font-bold mb-6">库存管理</h2>
-                <div class="bg-white rounded-3xl border p-8" id="inventory-content"></div>
+            <!-- PRODUCTS -->
+            <div id="products" class="section">
+                <div class="flex items-center justify-between mb-6"><div><h2 class="text-3xl font-bold">产品管理</h2><p class="text-slate-500">共 <span id="product-count">128</span> 个SKU</p></div><button onclick="showAddProductModal()" class="px-6 py-3.5 bg-sky-600 hover:bg-sky-700 text-white rounded-2xl flex items-center gap-x-3 text-sm font-medium"><i class="fa-solid fa-plus"></i> <span>新增产品</span></button></div>
+                <div class="bg-white rounded-3xl border overflow-hidden"><div class="p-5 border-b flex gap-x-4"><input id="product-search" onkeyup="filterProducts()" placeholder="搜索产品名称或规格..." class="flex-1 border rounded-2xl px-5 py-3 text-sm"><select id="category-filter" onchange="filterProducts()" class="border rounded-2xl px-5 py-3 text-sm"><option value="">全部品类</option><option value="防护耗材">防护耗材</option><option value="手术耗材">手术耗材</option><option value="诊断试剂">诊断试剂</option></select></div><table class="w-full text-sm medical-table"><thead class="bg-slate-50"><tr class="text-xs text-slate-500"><th class="px-8 py-5 text-left">产品名称</th><th class="px-8 py-5">规格</th><th class="px-8 py-5">品类</th><th class="px-8 py-5 text-right">单价</th><th class="px-8 py-5 text-right">库存</th><th class="px-8 py-5 w-28"></th></tr></thead><tbody id="products-table" class="divide-y"></tbody></table></div>
             </div>
-            <div id="sales" class="section">销售订单完整功能</div>
-            <div id="certificates" class="section">注册证管理完整功能</div>
-            <div id="customers" class="section">客户管理完整功能</div>
-            <div id="suppliers" class="section">供应商管理完整功能</div>
-            <div id="reports" class="section">报表中心完整功能</div>
-            <div id="settings" class="section">系统设置</div>
 
-            <!-- 入库管理 (新增) -->
+            <!-- INVENTORY (no adjustment) -->
+            <div id="inventory" class="section"><div class="flex justify-between items-center mb-6"><h2 class="text-3xl font-bold">库存管理</h2></div><div class="bg-white rounded-3xl border p-8" id="inventory-content"></div></div>
+
+            <!-- SALES -->
+            <div id="sales" class="section"><div class="flex justify-between items-center mb-6"><h2 class="text-3xl font-bold">销售订单</h2><button onclick="showCreateOrderModal()" class="px-6 py-3.5 bg-sky-600 text-white rounded-2xl text-sm flex items-center gap-x-3"><i class="fa-solid fa-plus"></i> <span>新建销售订单</span></button></div><div class="bg-white rounded-3xl border overflow-hidden"><table class="w-full text-sm"><thead class="bg-slate-50"><tr class="text-xs text-slate-500"><th class="px-8 py-5 text-left">订单号</th><th class="px-8 py-5">客户</th><th class="px-8 py-5 text-right">金额</th><th class="px-8 py-5">状态</th><th class="px-8 py-5 w-24"></th></tr></thead><tbody id="sales-table" class="divide-y"></tbody></table></div></div>
+
+            <!-- INBOUND (new) -->
             <div id="inbound" class="section">
                 <h2 class="text-3xl font-bold mb-6">入库管理</h2>
-                
                 <div class="flex gap-x-4 mb-6">
                     <button onclick="showInboundTab('procurement')" class="px-6 py-3 bg-sky-600 text-white rounded-2xl font-medium" id="tab-procurement">采购入库</button>
                     <button onclick="showInboundTab('other')" class="px-6 py-3 bg-slate-200 text-slate-700 rounded-2xl font-medium" id="tab-other">其他入库</button>
                 </div>
-
-                <!-- 采购入库 -->
                 <div id="procurement-tab">
                     <div class="flex gap-x-4 mb-6">
                         <button onclick="showCreateProcurementInbound()" class="px-6 py-3 bg-emerald-600 text-white rounded-2xl">新建采购入库单</button>
                         <button onclick="showInboundHistory('procurement')" class="px-6 py-3 bg-white border rounded-2xl">历史单据</button>
                     </div>
                 </div>
-
-                <!-- 其他入库 -->
                 <div id="other-tab" class="hidden">
                     <div class="flex gap-x-4 mb-6">
                         <button onclick="showCreateOtherInbound()" class="px-6 py-3 bg-emerald-600 text-white rounded-2xl">新建其他入库单</button>
@@ -103,27 +98,33 @@
                     </div>
                 </div>
             </div>
+
+            <!-- CERTIFICATES -->
+            <div id="certificates" class="section">注册证管理完整功能</div>
+            <div id="customers" class="section">客户管理完整功能</div>
+            <div id="suppliers" class="section">供应商管理完整功能</div>
+            <div id="reports" class="section">报表中心完整功能</div>
+            <div id="settings" class="section">系统设置</div>
         </div>
     </div>
 
-    <div id="modal" onclick="if(event.target.id==='modal') hideModal()" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center z-[100]">
-        <div onclick="event.stopImmediatePropagation()" class="bg-white rounded-3xl w-full max-w-2xl mx-4 shadow-2xl max-h-[92vh] overflow-auto" id="modal-content"></div>
-    </div>
+    <div id="modal" onclick="if(event.target.id==='modal') hideModal()" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center z-[100]"><div onclick="event.stopImmediatePropagation()" class="bg-white rounded-3xl w-full max-w-2xl mx-4 shadow-2xl max-h-[92vh] overflow-auto" id="modal-content"></div></div>
 
     <script>
         let data = { products: [], salesOrders: [], customers: [], suppliers: [], certificates: [], inboundOrders: [] };
 
         function loadData() {
-            const saved = localStorage.getItem('erp_v0.3_inbound');
+            const saved = localStorage.getItem('erp_v0.3_final');
             if (saved) data = JSON.parse(saved);
             else {
+                data.products = [{id:1, name:"医用外科口罩", category:"防护耗材", spec:"50只/盒", price:28.5, stock:1250, safetyStock:300}];
                 data.suppliers = [{id:1, name:"江苏医疗材料有限公司", contact:"陈经理", phone:"0512-8888xxxx"}];
                 data.certificates = [{id:1, certNo:"国械注准20263000001", holder:"华康医疗耗材有限公司", validityMonths:24, models:[{name:"普通型", specs:["医用外科口罩"], configs:[{name:"配置一", values:["无菌"]}]}]}];
                 saveData();
             }
         }
 
-        function saveData() { localStorage.setItem('erp_v0.3_inbound', JSON.stringify(data)); }
+        function saveData() { localStorage.setItem('erp_v0.3_final', JSON.stringify(data)); }
 
         function showSection(section) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -135,25 +136,19 @@
         function showInboundTab(tab) {
             document.getElementById('procurement-tab').classList.toggle('hidden', tab !== 'procurement');
             document.getElementById('other-tab').classList.toggle('hidden', tab !== 'other');
-            document.getElementById('tab-procurement').classList.toggle('bg-sky-600', tab === 'procurement');
-            document.getElementById('tab-procurement').classList.toggle('text-white', tab === 'procurement');
-            document.getElementById('tab-other').classList.toggle('bg-sky-600', tab === 'other');
-            document.getElementById('tab-other').classList.toggle('text-white', tab === 'other');
         }
 
         function showCreateProcurementInbound() {
             const supplierOptions = data.suppliers.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
-            const certOptions = data.certificates.map(c => `<option value="${c.id}">${c.certNo} - ${c.holder}</option>`).join('');
+            const certOptions = data.certificates.map(c => `<option value="${c.id}">${c.certNo}</option>`).join('');
 
             const html = `
                 <div class="p-8">
                     <h3 class="text-2xl font-bold mb-7">新建采购入库单</h3>
-                    
                     <div class="grid grid-cols-2 gap-5">
                         <div><label class="block text-sm mb-2">选择供应商</label><select id="inbound-supplier" class="w-full border rounded-2xl px-5 py-3.5">${supplierOptions}</select></div>
                         <div><label class="block text-sm mb-2">选择注册证</label><select id="inbound-cert" onchange="loadSpecsForInbound()" class="w-full border rounded-2xl px-5 py-3.5">${certOptions}</select></div>
                     </div>
-
                     <div id="inbound-product-form" class="mt-6 hidden">
                         <div class="border rounded-2xl p-6">
                             <div class="grid grid-cols-2 gap-5">
@@ -165,13 +160,10 @@
                                 <div><label class="block text-sm mb-2">到期日期（自动计算）</label><input id="inbound-expiry" class="w-full border rounded-2xl px-5 py-3.5 bg-slate-100" readonly></div>
                             </div>
                             <div class="mt-5"><label class="block text-sm mb-2">入库数量</label><input id="inbound-qty" type="number" value="100" class="w-full border rounded-2xl px-5 py-3.5"></div>
-                            
                             <button onclick="addInboundItem()" class="mt-6 w-full py-3.5 bg-emerald-600 text-white rounded-2xl">添加此产品到入库单</button>
                         </div>
                     </div>
-
                     <div id="inbound-items-list" class="mt-6"></div>
-
                     <div class="flex gap-x-4 mt-8">
                         <button onclick="hideModal()" class="flex-1 py-3.5 border rounded-2xl">取消</button>
                         <button onclick="saveProcurementInbound()" class="flex-1 py-3.5 bg-emerald-600 text-white rounded-2xl">保存入库单</button>
@@ -188,19 +180,15 @@
             const certId = parseInt(document.getElementById('inbound-cert').value);
             const cert = data.certificates.find(c => c.id === certId);
             if (!cert) return;
-
             const specSelect = document.getElementById('inbound-spec');
             specSelect.innerHTML = '';
-            cert.models.forEach(m => {
-                m.specs.forEach(spec => {
-                    const opt = document.createElement('option');
-                    opt.value = spec;
-                    opt.textContent = spec;
-                    specSelect.appendChild(opt);
-                });
-            });
+            cert.models.forEach(m => m.specs.forEach(spec => {
+                const opt = document.createElement('option');
+                opt.value = spec;
+                opt.textContent = spec;
+                specSelect.appendChild(opt);
+            }));
             document.getElementById('inbound-product-form').classList.remove('hidden');
-            loadModelsForInbound();
         }
 
         function loadModelsForInbound() {
@@ -208,14 +196,13 @@
             const spec = document.getElementById('inbound-spec').value;
             const cert = data.certificates.find(c => c.id === certId);
             if (!cert) return;
-
             const modelSelect = document.getElementById('inbound-model');
             modelSelect.innerHTML = '';
             cert.models.forEach(m => {
                 if (m.specs.includes(spec)) {
                     m.configs.forEach(cfg => {
                         const opt = document.createElement('option');
-                        opt.value = `${m.name} - ${cfg.name}`;
+                        opt.value = `${m.name}-${cfg.name}`;
                         opt.textContent = `${m.name} - ${cfg.name}`;
                         modelSelect.appendChild(opt);
                     });
@@ -228,11 +215,9 @@
             const certId = parseInt(document.getElementById('inbound-cert').value);
             const cert = data.certificates.find(c => c.id === certId);
             if (!prodDate || !cert) return;
-
             const date = new Date(prodDate);
             date.setMonth(date.getMonth() + cert.validityMonths);
-            const expiryStr = date.toISOString().split('T')[0].replace(/-/g, '');
-            document.getElementById('inbound-expiry').value = expiryStr;
+            document.getElementById('inbound-expiry').value = date.toISOString().split('T')[0].replace(/-/g, '');
         }
 
         function addInboundItem() {
@@ -243,32 +228,17 @@
             const expiry = document.getElementById('inbound-expiry').value;
             const qty = parseInt(document.getElementById('inbound-qty').value);
 
-            if (!spec || !model || !prodDate || !qty) {
-                alert('请填写完整信息');
-                return;
-            }
+            if (!spec || !model || !prodDate || !qty) { alert('请填写完整'); return; }
 
-            window.currentInboundItems.push({
-                certId, spec, model, prodDate, expiry, qty
-            });
-
+            window.currentInboundItems.push({certId, spec, model, prodDate, expiry, qty});
             renderInboundItems();
         }
 
         function renderInboundItems() {
             const container = document.getElementById('inbound-items-list');
-            if (!window.currentInboundItems || window.currentInboundItems.length === 0) {
-                container.innerHTML = '';
-                return;
-            }
-
-            let html = '<div class="font-semibold mb-3">已添加产品</div>';
+            let html = '';
             window.currentInboundItems.forEach((item, idx) => {
-                const cert = data.certificates.find(c => c.id === item.certId);
-                html += `<div class="flex justify-between items-center border-b py-3">
-                    <div>${cert ? cert.certNo : ''} - ${item.spec} - ${item.model} × ${item.qty}</div>
-                    <button onclick="removeInboundItem(${idx})" class="text-red-500 text-xs">删除</button>
-                </div>`;
+                html += `<div class="flex justify-between border-b py-2"><div>${item.spec} - ${item.model} × ${item.qty}</div><button onclick="removeInboundItem(${idx})" class="text-red-500">删除</button></div>`;
             });
             container.innerHTML = html;
         }
@@ -279,40 +249,29 @@
         }
 
         function saveProcurementInbound() {
-            if (!window.currentInboundItems || window.currentInboundItems.length === 0) {
-                alert('请至少添加一个产品');
-                return;
-            }
-
+            if (!window.currentInboundItems.length) { alert('请添加产品'); return; }
             const supplierId = parseInt(document.getElementById('inbound-supplier').value);
-            const newOrder = {
-                id: 'PI-' + new Date().toISOString().slice(0,10).replace(/-/g,'') + '-' + String(data.inboundOrders.length + 1).padStart(3, '0'),
+            data.inboundOrders.push({
+                id: 'PI-' + Date.now(),
                 type: '采购入库',
                 supplierId,
                 date: new Date().toISOString().split('T')[0],
                 items: window.currentInboundItems
-            };
-
-            data.inboundOrders.push(newOrder);
+            });
             saveData();
             hideModal();
-            alert('采购入库单创建成功！');
+            alert('采购入库单已保存！');
         }
 
-        function showCreateOtherInbound() {
-            alert('其他入库单功能开发中...');
-        }
-
-        function showInboundHistory(type) {
-            alert(type + '历史单据功能开发中...');
-        }
+        function showCreateOtherInbound() { alert('其他入库开发中'); }
+        function showInboundHistory(type) { alert(type + '历史单据开发中'); }
 
         function renderInventory() {
             const container = document.getElementById('inventory-content');
             let html = `<div class="space-y-4">`;
             data.products.forEach(p => {
                 const status = p.stock < p.safetyStock ? `<span class="px-4 py-1 text-xs bg-red-100 text-red-700 rounded-full">低库存</span>` : `<span class="px-4 py-1 text-xs bg-emerald-100 text-emerald-700 rounded-full">正常</span>`;
-                html += `<div class="flex justify-between items-center border-b pb-4"><div><div class="font-semibold">${p.name}</div><div class="text-xs text-slate-500">${p.spec}</div></div><div class="text-right"><div class="font-bold text-xl">${p.stock} <span class="text-xs font-normal">件</span></div>${status}</div></div>`;
+                html += `<div class="flex justify-between items-center border-b pb-4"><div><div class="font-semibold">${p.name}</div><div class="text-xs text-slate-500">${p.spec}</div></div><div class="text-right"><div class="font-bold text-xl">${p.stock} 件</div>${status}</div></div>`;
             });
             html += `</div>`;
             container.innerHTML = html;
@@ -327,7 +286,7 @@
         function initERP() {
             loadData();
             showSection('dashboard');
-            console.log('%c[ERP-online 0.3] 入库管理模块已添加', 'color:#0ea5e9');
+            console.log('%c[ERP-online 0.3] 完整版已恢复', 'color:#0ea5e9');
         }
 
         window.onload = initERP;

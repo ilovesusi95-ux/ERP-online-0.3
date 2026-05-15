@@ -1,0 +1,8 @@
+body { font-family: 'Inter', 'Noto Sans SC', system-ui, sans-serif; }
+.erp-card { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+.erp-card:hover { transform: translateY(-2px); }
+.nav-active { background-color: #0ea5e9; color: white !important; }
+.section { display: none; }
+.section.active { display: block; }
+.medical-table tr:hover { background-color: #f8fafc; }
+.tag { background: #e0f2fe; color: #0369a1; padding: 2px 10px; border-radius: 9999px; font-size: 12px; display: inline-flex; align-items: center; gap: 4px; }

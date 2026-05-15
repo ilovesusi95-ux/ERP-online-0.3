@@ -15,7 +15,6 @@
         .section { display: none; }
         .section.active { display: block; }
         .medical-table tr:hover { background-color: #f8fafc; }
-        .tag { background: #e0f2fe; color: #0369a1; padding: 2px 10px; border-radius: 9999px; font-size: 12px; display: inline-flex; align-items: center; gap: 4px; }
     </style>
 </head>
 <body class="bg-slate-50">
@@ -29,6 +28,7 @@
                     <span class="font-semibold text-sky-600">-online</span>
                     <span class="ml-3 text-xs px-3 py-1 bg-sky-100 text-sky-700 rounded-full font-mono">v0.3</span>
                 </div>
+                <div class="hidden md:block ml-6 text-sm text-slate-500">医疗耗材智能工厂</div>
             </div>
             <div class="flex items-center gap-x-3">
                 <div class="text-right"><div class="font-semibold text-sm">张晓峰</div><div class="text-xs text-slate-500">生产总监</div></div>
@@ -77,7 +77,7 @@
             <!-- SALES -->
             <div id="sales" class="section"><div class="flex justify-between items-center mb-6"><h2 class="text-3xl font-bold">销售订单</h2><button onclick="showCreateOrderModal()" class="px-6 py-3.5 bg-sky-600 text-white rounded-2xl text-sm flex items-center gap-x-3"><i class="fa-solid fa-plus"></i> <span>新建销售订单</span></button></div><div class="bg-white rounded-3xl border overflow-hidden"><table class="w-full text-sm"><thead class="bg-slate-50"><tr class="text-xs text-slate-500"><th class="px-8 py-5 text-left">订单号</th><th class="px-8 py-5">客户</th><th class="px-8 py-5 text-right">金额</th><th class="px-8 py-5">状态</th><th class="px-8 py-5 w-24"></th></tr></thead><tbody id="sales-table" class="divide-y"></tbody></table></div></div>
 
-            <!-- CERTIFICATES (增强版) -->
+            <!-- CERTIFICATES -->
             <div id="certificates" class="section">
                 <div class="flex justify-between items-center mb-6"><div><h2 class="text-3xl font-bold">注册证管理</h2><p class="text-slate-500">型号列表 + 规格 + 多配置</p></div><button onclick="showAddCertificateModal()" class="px-6 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl flex items-center gap-x-3 text-sm font-medium"><i class="fa-solid fa-plus"></i> <span>新增注册证</span></button></div>
                 <div class="bg-white rounded-3xl border overflow-hidden"><table class="w-full text-sm"><thead class="bg-slate-50"><tr class="text-xs text-slate-500"><th class="px-8 py-5 text-left">注册证号</th><th class="px-8 py-5">持证企业</th><th class="px-8 py-5">有效期</th><th class="px-8 py-5">型号数量</th><th class="px-8 py-5 w-28"></th></tr></thead><tbody id="certificates-table" class="divide-y"></tbody></table></div>
@@ -105,7 +105,7 @@
         function initTailwind() { tailwind.config = { theme: { extend: { fontFamily: { 'sans': ['Inter', 'Noto Sans SC', 'system-ui'] } } } }; }
 
         function loadData() {
-            const saved = localStorage.getItem('erp_v0.3_full_restored');
+            const saved = localStorage.getItem('erp_v0.3_full');
             if (saved) { data = JSON.parse(saved); }
             else {
                 data.products = [
@@ -121,7 +121,7 @@
             }
         }
 
-        function saveData() { localStorage.setItem('erp_v0.3_full_restored', JSON.stringify(data)); }
+        function saveData() { localStorage.setItem('erp_v0.3_full', JSON.stringify(data)); }
 
         function showSection(section) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -313,7 +313,7 @@
             updateKPIs();
         }
 
-        // ==================== 注册证管理 (最新版) ====================
+        // 注册证管理 (完整版)
         function renderCertificates() {
             const tbody = document.getElementById('certificates-table');
             tbody.innerHTML = '';
@@ -608,7 +608,7 @@
             showSection('dashboard');
             initCharts();
             updateKPIs();
-            console.log('%c[ERP-online 0.3] 完整版已恢复 + 注册证增强', 'color:#0ea5e9');
+            console.log('%c[ERP-online 0.3] 完整版已加载', 'color:#0ea5e9');
         }
 
         window.onload = initERP;

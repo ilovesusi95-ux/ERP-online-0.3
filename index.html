@@ -3,125 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ERP-online 0.3 | 医疗耗材厂家 ERP 系统</title>
+    <title>ERP-online 0.3 | 医疗耗材厂家 ERP</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body { font-family: 'Inter', 'Noto Sans SC', system-ui, sans-serif; }
-        .erp-card { transition: all 0.2s; }
-        .erp-card:hover { transform: translateY(-2px); }
-        .nav-active { background-color: #0ea5e9; color: white !important; }
-        .section { display: none; }
-        .section.active { display: block; }
-        .medical-table tr:hover { background-color: #f8fafc; }
+        .modal { animation: fadeInScale 0.2s ease-out forwards; }
+        @keyframes fadeInScale { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
         .tag { background: #e0f2fe; color: #0369a1; padding: 2px 10px; border-radius: 9999px; font-size: 12px; display: inline-flex; align-items: center; gap: 4px; }
-        .tag .remove { cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body class="bg-slate-50">
-    <nav class="bg-white border-b sticky top-0 z-50">
-        <div class="max-w-screen-2xl mx-auto px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-x-4">
-                <div class="w-11 h-11 bg-sky-600 rounded-2xl flex items-center justify-center"><i class="fa-solid fa-hospital text-white text-3xl"></i></div>
-                <div>
-                    <span class="font-bold text-3xl tracking-tight">ERP</span>
-                    <span class="font-semibold text-sky-600">-online</span>
-                    <span class="ml-3 text-xs px-3 py-1 bg-sky-100 text-sky-700 rounded-full font-mono">v0.3</span>
-                </div>
+    <div class="max-w-screen-2xl mx-auto p-8">
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-4xl font-bold">ERP-online 0.3</h1>
+                <p class="text-slate-500">医疗耗材厂家 · 注册证管理</p>
             </div>
-            <div class="flex items-center gap-x-3">
-                <div class="text-right"><div class="font-semibold text-sm">张晓峰</div><div class="text-xs text-slate-500">生产总监</div></div>
-                <div onclick="showUserMenu()" class="w-10 h-10 bg-sky-600 rounded-2xl flex items-center justify-center text-white font-bold cursor-pointer">张</div>
-            </div>
-        </div>
-    </nav>
-
-    <div class="max-w-screen-2xl mx-auto flex">
-        <div class="w-72 bg-white border-r min-h-[calc(100vh-4rem)] p-5 hidden lg:block">
-            <div class="space-y-1 text-[15px]">
-                <div onclick="showSection('dashboard')" class="nav-item flex items-center gap-x-4 px-5 py-3.5 text-slate-700 hover:bg-slate-100 rounded-2xl cursor-pointer nav-active" id="nav-dashboard"><i class="fa-solid fa-tachometer-alt w-5"></i> <span>仪表盘</span></div>
-                <div onclick="showSection('products')" class="nav-item flex items-center gap-x-4 px-5 py-3.5 text-slate-700 hover:bg-slate-100 rounded-2xl cursor-pointer" id="nav-products"><i class="fa-solid fa-boxes w-5"></i> <span>产品管理</span></div>
-                <div onclick="showSection('inventory')" class="nav-item flex items-center gap-x-4 px-5 py-3.5 text-slate-700 hover:bg-slate-100 rounded-2xl cursor-pointer" id="nav-inventory"><i class="fa-solid fa-warehouse w-5"></i> <span>库存管理</span></div>
-                <div onclick="showSection('sales')" class="nav-item flex items-center gap-x-4 px-5 py-3.5 text-slate-700 hover:bg-slate-100 rounded-2xl cursor-pointer" id="nav-sales"><i class="fa-solid fa-shopping-cart w-5"></i> <span>销售订单</span></div>
-                <div onclick="showSection('certificates')" class="nav-item flex items-center gap-x-4 px-5 py-3.5 text-slate-700 hover:bg-slate-100 rounded-2xl cursor-pointer" id="nav-certificates"><i class="fa-solid fa-file-medical w-5"></i> <span>注册证管理</span></div>
-                <div onclick="showSection('customers')" class="nav-item flex items-center gap-x-4 px-5 py-3.5 text-slate-700 hover:bg-slate-100 rounded-2xl cursor-pointer" id="nav-customers"><i class="fa-solid fa-users w-5"></i> <span>客户管理</span></div>
-                <div onclick="showSection('suppliers')" class="nav-item flex items-center gap-x-4 px-5 py-3.5 text-slate-700 hover:bg-slate-100 rounded-2xl cursor-pointer" id="nav-suppliers"><i class="fa-solid fa-handshake w-5"></i> <span>供应商管理</span></div>
-                <div onclick="showSection('reports')" class="nav-item flex items-center gap-x-4 px-5 py-3.5 text-slate-700 hover:bg-slate-100 rounded-2xl cursor-pointer" id="nav-reports"><i class="fa-solid fa-chart-line w-5"></i> <span>报表中心</span></div>
-            </div>
+            <button onclick="showAddCertificateModal()" class="px-6 py-3 bg-emerald-600 text-white rounded-2xl flex items-center gap-x-3">
+                <i class="fa-solid fa-plus"></i> <span>新增注册证</span>
+            </button>
         </div>
 
-        <div class="flex-1 p-8">
-            <!-- DASHBOARD, PRODUCTS, INVENTORY, SALES, CUSTOMERS, SUPPLIERS, REPORTS, SETTINGS 保持不变 (省略以节省空间，实际代码包含完整版本) -->
-            <div id="dashboard" class="section active">
-                <h1 class="text-4xl font-bold mb-8">仪表盘</h1>
-                <div class="grid grid-cols-4 gap-6">
-                    <div class="erp-card bg-white p-7 rounded-3xl border"><div class="text-sm text-slate-500">本月销售额</div><div id="kpi-sales" class="text-4xl font-bold mt-2">¥1,284,600</div></div>
-                    <div class="erp-card bg-white p-7 rounded-3xl border"><div class="text-sm text-slate-500">库存价值</div><div id="kpi-inventory" class="text-4xl font-bold mt-2">¥3,872,450</div></div>
-                    <div class="erp-card bg-white p-7 rounded-3xl border"><div class="text-sm text-slate-500">待处理订单</div><div id="kpi-orders" class="text-4xl font-bold mt-2">47</div></div>
-                    <div class="erp-card bg-white p-7 rounded-3xl border"><div class="text-sm text-slate-500">低库存预警</div><div id="kpi-lowstock" class="text-4xl font-bold mt-2 text-red-600">8</div></div>
-                </div>
-            </div>
-
-            <!-- 其他模块省略，实际包含完整代码 -->
-            <div id="products" class="section">产品管理（完整功能）</div>
-            <div id="inventory" class="section">库存管理（完整功能）</div>
-            <div id="sales" class="section">销售订单（完整功能）</div>
-            <div id="customers" class="section">客户管理（完整功能）</div>
-            <div id="suppliers" class="section">供应商管理（完整功能）</div>
-            <div id="reports" class="section">报表中心（完整功能）</div>
-            <div id="settings" class="section">系统设置</div>
-
-            <!-- 注册证管理 (增强版) -->
-            <div id="certificates" class="section">
-                <div class="flex justify-between items-center mb-6">
-                    <div>
-                        <h2 class="text-3xl font-bold">注册证管理</h2>
-                        <p class="text-slate-500">医疗器械注册证 + 规格型号配置</p>
-                    </div>
-                    <button onclick="showAddCertificateModal()" class="px-6 py-3.5 bg-emerald-600 text-white rounded-2xl flex items-center gap-x-3">
-                        <i class="fa-solid fa-plus"></i> <span>新增注册证</span>
-                    </button>
-                </div>
-
-                <div class="bg-white rounded-3xl border overflow-hidden">
-                    <table class="w-full text-sm">
-                        <thead class="bg-slate-50"><tr class="text-xs text-slate-500"><th class="px-8 py-5 text-left">注册证号</th><th class="px-8 py-5">持证企业</th><th class="px-8 py-5">有效期</th><th class="px-8 py-5">规格数量</th><th class="px-8 py-5 w-28"></th></tr></thead>
-                        <tbody id="certificates-table" class="divide-y"></tbody>
-                    </table>
-                </div>
-            </div>
+        <div class="bg-white rounded-3xl border shadow-sm">
+            <table class="w-full">
+                <thead class="bg-slate-50">
+                    <tr class="text-xs text-slate-500">
+                        <th class="px-8 py-5 text-left">注册证号</th>
+                        <th class="px-8 py-5">持证企业</th>
+                        <th class="px-8 py-5">有效期</th>
+                        <th class="px-8 py-5">型号数量</th>
+                        <th class="px-8 py-5 w-32"></th>
+                    </tr>
+                </thead>
+                <tbody id="certificates-table" class="divide-y text-sm"></tbody>
+            </table>
         </div>
     </div>
 
+    <!-- 主弹窗 -->
     <div id="modal" onclick="if(event.target.id==='modal') hideModal()" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center z-[100]">
-        <div onclick="event.stopImmediatePropagation()" class="bg-white rounded-3xl w-full max-w-2xl mx-4 shadow-2xl max-h-[90vh] overflow-auto" id="modal-content"></div>
+        <div onclick="event.stopImmediatePropagation()" class="bg-white rounded-3xl w-full max-w-2xl mx-4 shadow-2xl max-h-[92vh] overflow-auto" id="modal-content"></div>
     </div>
 
     <script>
-        let data = { products: [], salesOrders: [], customers: [], suppliers: [], certificates: [] };
+        let data = { certificates: [] };
 
         function loadData() {
-            const saved = localStorage.getItem('erp_v0.3_cert_v2');
+            const saved = localStorage.getItem('erp_cert_v3');
             if (saved) data = JSON.parse(saved);
             else {
                 data.certificates = [
-                    {id:1, certNo:"国械注准20263000001", holder:"华康医疗耗材有限公司", validityMonths:36, specs:[
-                        {name:"医用外科口罩", models:["普通型","儿童型"], configs:[{name:"配置一", values:["无菌","非无菌"]}, {name:"配置二", values:["耳带式","绑带式"]}]}
-                    ]},
-                    {id:2, certNo:"国械注准20263000012", holder:"华康医疗耗材有限公司", validityMonths:24, specs:[]}
+                    {id:1, certNo:"国械注准20263000001", holder:"华康医疗耗材有限公司", validityMonths:36, models:[
+                        {name:"普通型", specs:["医用外科口罩"], configs:[{name:"配置一", values:["无菌","非无菌"]}] }
+                    ]}
                 ];
                 saveData();
             }
         }
 
-        function saveData() { localStorage.setItem('erp_v0.3_cert_v2', JSON.stringify(data)); }
-
-        function showSection(section) {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.getElementById(section).classList.add('active');
-            if (section === 'certificates') renderCertificates();
-        }
+        function saveData() { localStorage.setItem('erp_cert_v3', JSON.stringify(data)); }
 
         function renderCertificates() {
             const tbody = document.getElementById('certificates-table');
@@ -132,26 +73,30 @@
                     <td class="px-8 py-5 font-mono text-emerald-700">${c.certNo}</td>
                     <td class="px-8 py-5">${c.holder}</td>
                     <td class="px-8 py-5"><span class="px-3 py-1 text-xs rounded-full bg-emerald-100 text-emerald-700">${c.validityMonths}个月</span></td>
-                    <td class="px-8 py-5">${c.specs.length} 个规格</td>
-                    <td class="px-8 py-5"><button onclick="viewCertificate(${c.id})" class="text-sky-600 text-xs px-4 py-2">查看详情</button> <button onclick="editCertificate(${c.id})" class="text-sky-600 text-xs px-4 py-2">编辑</button> <button onclick="deleteCertificate(${c.id})" class="text-red-500 text-xs px-4 py-2">删除</button></td>
+                    <td class="px-8 py-5">${c.models.length} 个型号</td>
+                    <td class="px-8 py-5"><button onclick="viewCertificate(${c.id})" class="text-sky-600 text-xs px-4 py-2">查看</button> <button onclick="editCertificate(${c.id})" class="text-sky-600 text-xs px-4 py-2">编辑</button> <button onclick="deleteCertificate(${c.id})" class="text-red-500 text-xs px-4 py-2">删除</button></td>
                 `;
                 tbody.appendChild(tr);
             });
         }
 
-        // 增强版新增/编辑注册证
         function showAddCertificateModal(editId = null) {
             const isEdit = !!editId;
-            const cert = isEdit ? data.certificates.find(x => x.id === editId) : {certNo:'', holder:'', validityMonths:24, specs:[]};
-            
-            let specsHtml = '';
-            if (cert.specs && cert.specs.length > 0) {
-                specsHtml = cert.specs.map((s, idx) => `
-                    <div class="border rounded-2xl p-4 mb-3">
-                        <div class="font-semibold">${s.name}</div>
-                        <div class="text-xs text-slate-500 mt-1">型号：${s.models.join('、')}</div>
-                        <div class="text-xs text-slate-500">配置：${s.configs.map(c => c.name + ' (' + c.values.join('、') + ')').join(' | ')}</div>
-                        <button onclick="removeSpecFromTemp(${idx})" class="text-red-500 text-xs mt-2">删除此规格</button>
+            const cert = isEdit ? data.certificates.find(x => x.id === editId) : {certNo:'', holder:'', validityMonths:24, models:[]};
+            window.tempCert = cert;
+
+            let modelsHtml = '';
+            if (cert.models && cert.models.length > 0) {
+                modelsHtml = cert.models.map((m, idx) => `
+                    <div class="border rounded-2xl p-4 mb-3 flex justify-between items-center">
+                        <div>
+                            <div class="font-semibold">${m.name}</div>
+                            <div class="text-xs text-slate-500">规格：${m.specs.length} | 配置：${m.configs.length}</div>
+                        </div>
+                        <div class="flex gap-x-2">
+                            <button onclick="editModel(${idx})" class="text-sky-600 text-xs px-3 py-1">编辑</button>
+                            <button onclick="removeModel(${idx})" class="text-red-500 text-xs px-3 py-1">删除</button>
+                        </div>
                     </div>
                 `).join('');
             }
@@ -168,11 +113,11 @@
 
                     <div class="mt-8">
                         <div class="flex justify-between items-center mb-4">
-                            <div class="font-semibold">规格列表</div>
-                            <button onclick="showAddSpecModal(${isEdit ? editId : 'null'})" class="px-4 py-2 bg-sky-600 text-white text-sm rounded-xl">+ 添加规格</button>
+                            <div class="font-semibold">型号列表</div>
+                            <button onclick="showAddModelModal()" class="px-5 py-2 bg-sky-600 text-white text-sm rounded-2xl">+ 添加型号</button>
                         </div>
-                        <div id="specs-list" class="max-h-64 overflow-auto border rounded-2xl p-4">
-                            ${specsHtml || '<div class="text-center text-slate-400 py-6">暂无规格，请添加</div>'}
+                        <div class="border rounded-2xl p-4 min-h-[120px]">
+                            ${modelsHtml || '<div class="text-center text-slate-400 py-8">暂无型号，请添加</div>'}
                         </div>
                     </div>
 
@@ -185,44 +130,41 @@
             document.getElementById('modal-content').innerHTML = html;
             document.getElementById('modal').classList.remove('hidden');
             document.getElementById('modal').classList.add('flex');
-
-            // 临时存储当前编辑的证书
-            window.tempCert = cert;
         }
 
-        function showAddSpecModal(certId) {
+        function showAddModelModal(modelIndex = null) {
+            const isEditModel = modelIndex !== null;
+            const model = isEditModel ? window.tempCert.models[modelIndex] : {name:'', specs:[], configs:[]};
+
+            let configHtml = '';
+            if (model.configs && model.configs.length > 0) {
+                configHtml = model.configs.map((c, i) => `
+                    <div class="mb-4">
+                        <label class="block text-sm mb-2">${c.name}</label>
+                        <input id="config-val-${i}" class="w-full border rounded-2xl px-5 py-3.5" value="${c.values.join(',')}">
+                    </div>
+                `).join('');
+            } else {
+                configHtml = `<div class="mb-4"><label class="block text-sm mb-2">配置一</label><input id="config-val-0" class="w-full border rounded-2xl px-5 py-3.5" placeholder="无菌,非无菌"></div>`;
+            }
+
             const html = `
                 <div class="p-8">
-                    <h3 class="text-xl font-bold mb-6">添加规格</h3>
+                    <h3 class="text-xl font-bold mb-6">${isEditModel ? '编辑型号' : '添加型号'}</h3>
                     <div class="space-y-5">
-                        <div><label class="block text-sm mb-2">规格名称</label><input id="spec-name" class="w-full border rounded-2xl px-5 py-3.5" placeholder="医用外科口罩"></div>
+                        <div><label class="block text-sm mb-2">型号名称</label><input id="model-name" class="w-full border rounded-2xl px-5 py-3.5" value="${model.name}"></div>
                         
-                        <div>
-                            <label class="block text-sm mb-2">型号（可输入多个，用逗号分隔）</label>
-                            <input id="spec-models" class="w-full border rounded-2xl px-5 py-3.5" placeholder="普通型,儿童型,医护专用型">
-                        </div>
+                        <div><label class="block text-sm mb-2">规格（多个用逗号分隔）</label><input id="model-specs" class="w-full border rounded-2xl px-5 py-3.5" value="${model.specs.join(',')}"></div>
 
-                        <div id="config-groups">
-                            <div class="mb-4">
-                                <label class="block text-sm mb-2">配置一</label>
-                                <input id="config1" class="w-full border rounded-2xl px-5 py-3.5" placeholder="无菌,非无菌">
-                            </div>
-                            <div class="mb-4">
-                                <label class="block text-sm mb-2">配置二</label>
-                                <input id="config2" class="w-full border rounded-2xl px-5 py-3.5" placeholder="耳带式,绑带式">
-                            </div>
-                            <div class="mb-4">
-                                <label class="block text-sm mb-2">配置三</label>
-                                <input id="config3" class="w-full border rounded-2xl px-5 py-3.5" placeholder="">
-                            </div>
+                        <div id="config-container">
+                            ${configHtml}
                         </div>
-
-                        <button onclick="addMoreConfig()" class="text-sky-600 text-sm">+ 添加更多配置项</button>
+                        <button onclick="addMoreConfigField()" class="text-sky-600 text-sm">+ 添加更多配置项</button>
                     </div>
 
                     <div class="flex gap-x-4 mt-8">
                         <button onclick="hideModal()" class="flex-1 py-3.5 border rounded-2xl">取消</button>
-                        <button onclick="addSpecToCertificate(${certId})" class="flex-1 py-3.5 bg-emerald-600 text-white rounded-2xl">添加此规格</button>
+                        <button onclick="saveModel(${isEditModel ? modelIndex : 'null'})" class="flex-1 py-3.5 bg-emerald-600 text-white rounded-2xl">保存型号</button>
                     </div>
                 </div>
             `;
@@ -231,45 +173,51 @@
             document.getElementById('modal').classList.add('flex');
         }
 
-        function addMoreConfig() {
-            const container = document.getElementById('config-groups');
+        function addMoreConfigField() {
+            const container = document.getElementById('config-container');
             const count = container.children.length + 1;
             const div = document.createElement('div');
             div.className = 'mb-4';
-            div.innerHTML = `<label class="block text-sm mb-2">配置${count}</label><input id="config${count}" class="w-full border rounded-2xl px-5 py-3.5" placeholder="">`;
+            div.innerHTML = `<label class="block text-sm mb-2">配置${count}</label><input id="config-val-${count-1}" class="w-full border rounded-2xl px-5 py-3.5">`;
             container.appendChild(div);
         }
 
-        function addSpecToCertificate(certId) {
-            const name = document.getElementById('spec-name').value || '未命名规格';
-            const modelsStr = document.getElementById('spec-models').value;
-            const models = modelsStr ? modelsStr.split(',').map(s => s.trim()).filter(Boolean) : [];
+        function saveModel(modelIndex) {
+            const name = document.getElementById('model-name').value || '未命名型号';
+            const specsStr = document.getElementById('model-specs').value;
+            const specs = specsStr ? specsStr.split(',').map(s => s.trim()).filter(Boolean) : [];
 
             const configs = [];
-            const container = document.getElementById('config-groups');
-            for (let i = 1; i <= container.children.length; i++) {
-                const input = document.getElementById('config' + i);
+            const container = document.getElementById('config-container');
+            for (let i = 0; i < container.children.length; i++) {
+                const input = document.getElementById('config-val-' + i);
                 if (input && input.value.trim()) {
                     const values = input.value.split(',').map(s => s.trim()).filter(Boolean);
                     if (values.length > 0) {
-                        configs.push({name: `配置${i}`, values});
+                        configs.push({name: `配置${i+1}`, values});
                     }
                 }
             }
 
-            if (!window.tempCert.specs) window.tempCert.specs = [];
-            window.tempCert.specs.push({name, models, configs});
+            if (!window.tempCert.models) window.tempCert.models = [];
+
+            if (modelIndex !== null) {
+                window.tempCert.models[modelIndex] = {name, specs, configs};
+            } else {
+                window.tempCert.models.push({name, specs, configs});
+            }
 
             hideModal();
-            // 重新打开主编辑弹窗
-            setTimeout(() => {
-                showAddCertificateModal(window.tempCert.id || null);
-            }, 300);
+            setTimeout(() => showAddCertificateModal(window.tempCert.id || null), 250);
         }
 
-        function removeSpecFromTemp(idx) {
-            if (window.tempCert.specs) {
-                window.tempCert.specs.splice(idx, 1);
+        function editModel(idx) {
+            showAddModelModal(idx);
+        }
+
+        function removeModel(idx) {
+            if (window.tempCert.models) {
+                window.tempCert.models.splice(idx, 1);
                 hideModal();
                 setTimeout(() => showAddCertificateModal(window.tempCert.id || null), 200);
             }
@@ -285,15 +233,9 @@
                 c.certNo = certNo;
                 c.holder = holder;
                 c.validityMonths = validityMonths;
-                c.specs = window.tempCert.specs || [];
+                c.models = window.tempCert.models || [];
             } else {
-                data.certificates.push({
-                    id: Date.now(),
-                    certNo,
-                    holder,
-                    validityMonths,
-                    specs: window.tempCert.specs || []
-                });
+                data.certificates.push({id: Date.now(), certNo, holder, validityMonths, models: window.tempCert.models || []});
             }
             saveData();
             hideModal();
@@ -315,17 +257,17 @@
             const c = data.certificates.find(x => x.id === id);
             if (!c) return;
 
-            let specsHtml = c.specs.length > 0 ? c.specs.map(s => `
+            let modelsHtml = c.models.length > 0 ? c.models.map(m => `
                 <div class="border rounded-2xl p-5 mb-4">
-                    <div class="font-bold text-lg">${s.name}</div>
-                    <div class="mt-3"><span class="font-medium">型号：</span> ${s.models.length ? s.models.join('、') : '无'}</div>
+                    <div class="font-bold text-lg">${m.name}</div>
+                    <div class="mt-2 text-sm"><span class="font-medium">规格：</span> ${m.specs.join('、') || '无'}</div>
                     <div class="mt-2">
-                        ${s.configs.map(cfg => `<div class="text-sm"><span class="font-medium">${cfg.name}：</span> ${cfg.values.join('、')}</div>`).join('')}
+                        ${m.configs.map(cfg => `<div class="text-sm"><span class="font-medium">${cfg.name}：</span> ${cfg.values.join('、')}</div>`).join('')}
                     </div>
                 </div>
-            `).join('') : '<div class="text-center py-8 text-slate-400">暂无规格信息</div>';
+            `).join('') : '<div class="text-center py-8 text-slate-400">暂无型号</div>';
 
-            const html = `<div class="p-8"><h3 class="text-2xl font-bold mb-6">${c.certNo}</h3><div class="text-sm text-slate-500 mb-6">${c.holder} · 有效期 ${c.validityMonths}个月</div><div class="font-semibold mb-4">规格详情</div>${specsHtml}<div class="mt-8"><button onclick="hideModal()" class="w-full py-3.5 border rounded-2xl">关闭</button></div></div>`;
+            const html = `<div class="p-8"><h3 class="text-2xl font-bold mb-6">${c.certNo}</h3><div class="text-sm text-slate-500 mb-6">${c.holder} · 有效期 ${c.validityMonths}个月</div><div class="font-semibold mb-4">型号详情</div>${modelsHtml}<div class="mt-8"><button onclick="hideModal()" class="w-full py-3.5 border rounded-2xl">关闭</button></div></div>`;
             document.getElementById('modal-content').innerHTML = html;
             document.getElementById('modal').classList.remove('hidden');
             document.getElementById('modal').classList.add('flex');
@@ -337,13 +279,13 @@
             m.classList.add('hidden');
         }
 
-        function initERP() {
+        function init() {
             loadData();
-            showSection('certificates');
-            console.log('%c[ERP v0.3] 注册证管理增强版已加载', 'color:#0ea5e9');
+            renderCertificates();
+            console.log('%c[ERP v0.3] 型号列表 + 配置版已加载', 'color:#0ea5e9');
         }
 
-        window.onload = initERP;
+        window.onload = init;
     </script>
 </body>
 </html>

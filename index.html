@@ -15,6 +15,7 @@
         .section { display: none; }
         .section.active { display: block; }
         .medical-table tr:hover { background-color: #f8fafc; }
+        .inbound-table th, .inbound-table td { padding: 12px 16px; text-align: left; border-bottom: 1px solid #e2e8f0; }
     </style>
 </head>
 <body class="bg-slate-50">
@@ -119,7 +120,7 @@
         </div>
     </div>
 
-    <div id="modal" onclick="if(event.target.id==='modal') hideModal()" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center z-[100]"><div onclick="event.stopImmediatePropagation()" class="bg-white rounded-3xl w-full max-w-2xl mx-4 shadow-2xl max-h-[92vh] overflow-auto" id="modal-content"></div></div>
+    <div id="modal" onclick="if(event.target.id==='modal') hideModal()" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center z-[100]"><div onclick="event.stopImmediatePropagation()" class="bg-white rounded-3xl w-full max-w-4xl mx-4 shadow-2xl max-h-[92vh] overflow-auto" id="modal-content"></div></div>
 
     <script>
         let data = { products: [], salesOrders: [], customers: [], suppliers: [], certificates: [], inboundOrders: [] };
@@ -305,7 +306,7 @@
             renderSalesOrders();
         }
 
-        // 入库管理
+        // ==================== 入库管理（已优化为表格界面） ====================
         function showInboundTab(tab) {
             document.getElementById('procurement-tab').classList.toggle('hidden', tab !== 'procurement');
             document.getElementById('other-tab').classList.toggle('hidden', tab !== 'other');
@@ -317,29 +318,79 @@
 
             const html = `
                 <div class="p-8">
-                    <h3 class="text-2xl font-bold mb-7">新建采购入库单</h3>
-                    <div class="grid grid-cols-2 gap-5">
-                        <div><label class="block text-sm mb-2">选择供应商</label><select id="inbound-supplier" class="w-full border rounded-2xl px-5 py-3.5">${supplierOptions}</select></div>
-                        <div><label class="block text-sm mb-2">选择注册证</label><select id="inbound-cert" onchange="loadSpecsForInbound()" class="w-full border rounded-2xl px-5 py-3.5">${certOptions}</select></div>
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h3 class="text-2xl font-bold">新建采购入库单</h3>
+                            <p class="text-sm text-slate-500 mt-1">步骤：选择供应商 → 注册证 → 添加多行产品（从左到右依次选择）</p>
+                        </div>
+                        <div class="text-xs px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full">支持连续添加</div>
                     </div>
-                    <div id="inbound-product-form" class="mt-6 hidden">
-                        <div class="border rounded-2xl p-6">
-                            <div class="grid grid-cols-2 gap-5">
-                                <div><label class="block text-sm mb-2">选择规格</label><select id="inbound-spec" onchange="loadModelsForInbound()" class="w-full border rounded-2xl px-5 py-3.5"></select></div>
-                                <div><label class="block text-sm mb-2">选择型号/配置</label><select id="inbound-model" class="w-full border rounded-2xl px-5 py-3.5"></select></div>
-                            </div>
-                            <div class="grid grid-cols-2 gap-5 mt-5">
-                                <div><label class="block text-sm mb-2">生产日期</label><input id="inbound-prod-date" type="date" class="w-full border rounded-2xl px-5 py-3.5" onchange="calculateExpiryDate()"></div>
-                                <div><label class="block text-sm mb-2">到期日期（自动计算）</label><input id="inbound-expiry" class="w-full border rounded-2xl px-5 py-3.5 bg-slate-100" readonly></div>
-                            </div>
-                            <div class="mt-5"><label class="block text-sm mb-2">入库数量</label><input id="inbound-qty" type="number" value="100" class="w-full border rounded-2xl px-5 py-3.5"></div>
-                            <button onclick="addInboundItem()" class="mt-6 w-full py-3.5 bg-emerald-600 text-white rounded-2xl">添加此产品到入库单</button>
+
+                    <div class="grid grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">选择供应商</label>
+                            <select id="inbound-supplier" class="w-full border rounded-2xl px-5 py-3.5 text-sm">${supplierOptions}</select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">选择注册证</label>
+                            <select id="inbound-cert" onchange="loadSpecsForInbound()" class="w-full border rounded-2xl px-5 py-3.5 text-sm">${certOptions}</select>
                         </div>
                     </div>
-                    <div id="inbound-items-list" class="mt-6"></div>
+
+                    <div id="inbound-product-form" class="hidden border rounded-3xl p-6 bg-slate-50">
+                        <div class="font-semibold text-sm mb-4 text-emerald-700 flex items-center gap-x-2">
+                            <i class="fa-solid fa-plus"></i> 添加产品行（从左到右依次选择）
+                        </div>
+                        
+                        <div class="grid grid-cols-12 gap-4 items-end">
+                            <!-- 规格 -->
+                            <div class="col-span-3">
+                                <label class="block text-xs text-slate-500 mb-1">规格</label>
+                                <select id="inbound-spec" onchange="loadModelsForInbound()" class="w-full border rounded-2xl px-4 py-3 text-sm"></select>
+                            </div>
+                            
+                            <!-- 型号/配置 -->
+                            <div class="col-span-3">
+                                <label class="block text-xs text-slate-500 mb-1">型号/配置</label>
+                                <select id="inbound-model" class="w-full border rounded-2xl px-4 py-3 text-sm"></select>
+                            </div>
+                            
+                            <!-- 生产日期 -->
+                            <div class="col-span-2">
+                                <label class="block text-xs text-slate-500 mb-1">生产日期</label>
+                                <input id="inbound-prod-date" type="date" class="w-full border rounded-2xl px-4 py-3 text-sm" onchange="calculateExpiryDate()">
+                            </div>
+                            
+                            <!-- 到期日期（自动） -->
+                            <div class="col-span-2">
+                                <label class="block text-xs text-slate-500 mb-1">到期日期（自动）</label>
+                                <input id="inbound-expiry" class="w-full border rounded-2xl px-4 py-3 text-sm bg-white font-mono" readonly placeholder="自动计算">
+                            </div>
+                            
+                            <!-- 数量 -->
+                            <div class="col-span-1">
+                                <label class="block text-xs text-slate-500 mb-1">数量</label>
+                                <input id="inbound-qty" type="number" value="100" class="w-full border rounded-2xl px-4 py-3 text-sm">
+                            </div>
+                            
+                            <div class="col-span-1">
+                                <button onclick="addInboundItem()" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-sm rounded-2xl font-medium">添加行</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 已添加产品表格 -->
+                    <div class="mt-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="font-semibold">已添加产品 <span id="inbound-item-count" class="text-emerald-600">(0)</span></div>
+                            <div class="text-xs text-slate-500">一种产品录入成功后可继续添加下一行</div>
+                        </div>
+                        <div id="inbound-items-list" class="border rounded-3xl overflow-hidden bg-white min-h-[120px]"></div>
+                    </div>
+
                     <div class="flex gap-x-4 mt-8">
-                        <button onclick="hideModal()" class="flex-1 py-3.5 border rounded-2xl">取消</button>
-                        <button onclick="saveProcurementInbound()" class="flex-1 py-3.5 bg-emerald-600 text-white rounded-2xl">保存入库单</button>
+                        <button onclick="hideModal()" class="flex-1 py-3.5 border rounded-2xl text-sm">取消</button>
+                        <button onclick="saveProcurementInbound()" class="flex-1 py-3.5 bg-emerald-600 text-white rounded-2xl text-sm font-medium">保存入库单</button>
                     </div>
                 </div>
             `;
@@ -347,20 +398,26 @@
             document.getElementById('modal').classList.remove('hidden');
             document.getElementById('modal').classList.add('flex');
             window.currentInboundItems = [];
+            renderInboundItems(); // 初始化空表格
         }
 
         function loadSpecsForInbound() {
             const certId = parseInt(document.getElementById('inbound-cert').value);
             const cert = data.certificates.find(c => c.id === certId);
             if (!cert) return;
+
             const specSelect = document.getElementById('inbound-spec');
-            specSelect.innerHTML = '';
-            cert.models.forEach(m => m.specs.forEach(spec => {
-                const opt = document.createElement('option');
-                opt.value = spec;
-                opt.textContent = spec;
-                specSelect.appendChild(opt);
-            }));
+            specSelect.innerHTML = '<option value="">请选择规格</option>';
+            
+            cert.models.forEach(m => {
+                m.specs.forEach(spec => {
+                    const opt = document.createElement('option');
+                    opt.value = spec;
+                    opt.textContent = spec;
+                    specSelect.appendChild(opt);
+                });
+            });
+
             document.getElementById('inbound-product-form').classList.remove('hidden');
         }
 
@@ -368,14 +425,16 @@
             const certId = parseInt(document.getElementById('inbound-cert').value);
             const spec = document.getElementById('inbound-spec').value;
             const cert = data.certificates.find(c => c.id === certId);
-            if (!cert) return;
+            if (!cert || !spec) return;
+
             const modelSelect = document.getElementById('inbound-model');
-            modelSelect.innerHTML = '';
+            modelSelect.innerHTML = '<option value="">请选择型号/配置</option>';
+
             cert.models.forEach(m => {
                 if (m.specs.includes(spec)) {
                     m.configs.forEach(cfg => {
                         const opt = document.createElement('option');
-                        opt.value = `${m.name}-${cfg.name}`;
+                        opt.value = `${m.name} - ${cfg.name}`;
                         opt.textContent = `${m.name} - ${cfg.name}`;
                         modelSelect.appendChild(opt);
                     });
@@ -384,13 +443,22 @@
         }
 
         function calculateExpiryDate() {
-            const prodDate = document.getElementById('inbound-prod-date').value;
+            const prodDateStr = document.getElementById('inbound-prod-date').value;
             const certId = parseInt(document.getElementById('inbound-cert').value);
             const cert = data.certificates.find(c => c.id === certId);
-            if (!prodDate || !cert) return;
-            const date = new Date(prodDate);
-            date.setMonth(date.getMonth() + cert.validityMonths);
-            document.getElementById('inbound-expiry').value = date.toISOString().split('T')[0].replace(/-/g, '');
+            
+            if (!prodDateStr || !cert) return;
+
+            const date = new Date(prodDateStr);
+            date.setMonth(date.getMonth() + (cert.validityMonths || 24));
+            
+            // 格式化为 YYYYMMDD（如 20270504）
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const formatted = `${year}${month}${day}`;
+            
+            document.getElementById('inbound-expiry').value = formatted;
         }
 
         function addInboundItem() {
@@ -401,19 +469,76 @@
             const expiry = document.getElementById('inbound-expiry').value;
             const qty = parseInt(document.getElementById('inbound-qty').value);
 
-            if (!spec || !model || !prodDate || !qty) { alert('请填写完整'); return; }
+            if (!spec || !model || !prodDate || !expiry || !qty) {
+                alert('请完整填写规格、型号/配置、生产日期和数量');
+                return;
+            }
 
-            window.currentInboundItems.push({certId, spec, model, prodDate, expiry, qty});
+            window.currentInboundItems.push({
+                certId, spec, model, prodDate, expiry, qty
+            });
+            
             renderInboundItems();
+            
+            // 清空表单，方便继续添加
+            document.getElementById('inbound-spec').value = '';
+            document.getElementById('inbound-model').innerHTML = '<option value="">请选择型号/配置</option>';
+            document.getElementById('inbound-prod-date').value = '';
+            document.getElementById('inbound-expiry').value = '';
+            document.getElementById('inbound-qty').value = '100';
         }
 
         function renderInboundItems() {
             const container = document.getElementById('inbound-items-list');
-            let html = '';
+            const countEl = document.getElementById('inbound-item-count');
+            
+            if (!window.currentInboundItems || window.currentInboundItems.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-12 text-slate-400">
+                        <i class="fa-solid fa-inbox text-4xl mb-3"></i>
+                        <div>暂无产品，请在上方添加</div>
+                    </div>
+                `;
+                if (countEl) countEl.textContent = '(0)';
+                return;
+            }
+
+            let html = `
+                <table class="w-full text-sm inbound-table">
+                    <thead class="bg-slate-100">
+                        <tr>
+                            <th class="px-4 py-3 text-left">规格</th>
+                            <th class="px-4 py-3 text-left">型号/配置</th>
+                            <th class="px-4 py-3 text-left">生产日期</th>
+                            <th class="px-4 py-3 text-left">到期日期</th>
+                            <th class="px-4 py-3 text-right">数量</th>
+                            <th class="px-4 py-3 w-12"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
             window.currentInboundItems.forEach((item, idx) => {
-                html += `<div class="flex justify-between border-b py-2"><div>${item.spec} - ${item.model} × ${item.qty}</div><button onclick="removeInboundItem(${idx})" class="text-red-500">删除</button></div>`;
+                html += `
+                    <tr class="hover:bg-slate-50">
+                        <td class="px-4 py-3 font-medium">${item.spec}</td>
+                        <td class="px-4 py-3 text-slate-600">${item.model}</td>
+                        <td class="px-4 py-3 font-mono text-sm">${item.prodDate}</td>
+                        <td class="px-4 py-3 font-mono text-sm text-emerald-600">${item.expiry}</td>
+                        <td class="px-4 py-3 text-right font-semibold">${item.qty}</td>
+                        <td class="px-4 py-3 text-right">
+                            <button onclick="removeInboundItem(${idx})" class="text-red-500 hover:text-red-700 px-2">
+                                <i class="fa-solid fa-trash text-sm"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
             });
+
+            html += `</tbody></table>`;
             container.innerHTML = html;
+            
+            if (countEl) countEl.textContent = `(${window.currentInboundItems.length})`;
         }
 
         function removeInboundItem(idx) {
@@ -422,23 +547,52 @@
         }
 
         function saveProcurementInbound() {
-            if (!window.currentInboundItems.length) { alert('请添加产品'); return; }
+            if (!window.currentInboundItems || window.currentInboundItems.length === 0) {
+                alert('请至少添加一个产品');
+                return;
+            }
+            
             const supplierId = parseInt(document.getElementById('inbound-supplier').value);
-            data.inboundOrders.push({
+            const certId = parseInt(document.getElementById('inbound-cert').value);
+            const cert = data.certificates.find(c => c.id === certId);
+
+            const newInbound = {
                 id: 'PI-' + Date.now(),
                 type: '采购入库',
                 supplierId,
+                certId,
+                certNo: cert ? cert.certNo : '',
                 date: new Date().toISOString().split('T')[0],
-                items: window.currentInboundItems
+                items: window.currentInboundItems,
+                totalQty: window.currentInboundItems.reduce((sum, i) => sum + i.qty, 0)
+            };
+
+            data.inboundOrders.push(newInbound);
+            
+            // 更新库存（简单累加）
+            window.currentInboundItems.forEach(item => {
+                // 这里可以根据 spec/model 匹配产品并增加库存（演示简化）
+                const product = data.products.find(p => p.spec === item.spec);
+                if (product) {
+                    product.stock += item.qty;
+                }
             });
+
             saveData();
             hideModal();
-            alert('采购入库单已保存！');
+            
+            // 刷新相关页面
+            if (document.getElementById('inventory').classList.contains('active')) {
+                renderInventory();
+            }
+            
+            alert(`采购入库单 ${newInbound.id} 已保存！\n共 ${newInbound.totalQty} 件产品入库`);
         }
 
         function showCreateOtherInbound() { alert('其他入库功能开发中'); }
         function showInboundHistory(type) { alert(type + '历史单据开发中'); }
 
+        // ==================== 其他模块保持不变 ====================
         function renderCertificates() {
             const tbody = document.getElementById('certificates-table');
             tbody.innerHTML = '';
@@ -729,7 +883,7 @@
             showSection('dashboard');
             initCharts();
             updateKPIs();
-            console.log('%c[ERP-online 0.3] 完整版已恢复 - 所有模块齐全', 'color:#0ea5e9');
+            console.log('%c[ERP-online 0.3] 入库管理已优化为表格界面 - 支持连续添加 + 自动到期日期', 'color:#10b981');
         }
 
         window.onload = initERP;

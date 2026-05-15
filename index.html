@@ -16,12 +16,9 @@
         .section { display: none; }
         .section.active { display: block; }
         .medical-table tr:hover { background-color: #f8fafc; }
-        .modal { animation: fadeInScale 0.2s ease-out forwards; }
-        @keyframes fadeInScale { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
     </style>
 </head>
 <body class="bg-slate-50">
-    <!-- Top Nav -->
     <nav class="bg-white border-b sticky top-0 z-50">
         <div class="max-w-screen-2xl mx-auto px-8 h-16 flex items-center justify-between">
             <div class="flex items-center gap-x-4">
@@ -33,17 +30,13 @@
                 </div>
                 <div class="hidden md:block ml-6 text-sm text-slate-500">医疗耗材智能工厂</div>
             </div>
-
             <div class="flex items-center gap-x-5">
                 <div class="hidden md:flex items-center bg-slate-100 rounded-2xl px-5 py-2 w-80">
                     <i class="fa-solid fa-search text-slate-400 mr-3"></i>
                     <input id="global-search" type="text" placeholder="搜索产品、订单、客户..." class="bg-transparent w-full focus:outline-none text-sm" onkeyup="if(event.key==='Enter') searchGlobal()">
                 </div>
                 <div class="flex items-center gap-x-3">
-                    <div class="text-right">
-                        <div class="font-semibold text-sm">张晓峰</div>
-                        <div class="text-xs text-slate-500 -mt-0.5">生产总监</div>
-                    </div>
+                    <div class="text-right"><div class="font-semibold text-sm">张晓峰</div><div class="text-xs text-slate-500 -mt-0.5">生产总监</div></div>
                     <div onclick="showUserMenu()" class="w-10 h-10 bg-sky-600 rounded-2xl flex items-center justify-center text-white font-bold cursor-pointer">张</div>
                 </div>
             </div>
@@ -51,241 +44,77 @@
     </nav>
 
     <div class="max-w-screen-2xl mx-auto flex">
-        <!-- Sidebar -->
         <div class="w-72 bg-white border-r min-h-[calc(100vh-4rem)] p-5 hidden lg:block">
             <div class="space-y-1 text-[15px]">
-                <div onclick="showSection('dashboard')" class="nav-item flex items-center gap-x-4 px-5 py-3.5 text-slate-700 hover:bg-slate-100 rounded-2xl cursor-pointer nav-active" id="nav-dashboard">
-                    <i class="fa-solid fa-tachometer-alt w-5 text-lg"></i> <span class="font-medium">仪表盘</span>
-                </div>
-                <div onclick="showSection('products')" class="nav-item flex items-center gap-x-4 px-5 py-3.5 text-slate-700 hover:bg-slate-100 rounded-2xl cursor-pointer" id="nav-products">
-                    <i class="fa-solid fa-boxes w-5 text-lg"></i> <span class="font-medium">产品管理</span>
-                </div>
-                <div onclick="showSection('inventory')" class="nav-item flex items-center gap-x-4 px-5 py-3.5 text-slate-700 hover:bg-slate-100 rounded-2xl cursor-pointer" id="nav-inventory">
-                    <i class="fa-solid fa-warehouse w-5 text-lg"></i> <span class="font-medium">库存管理</span>
-                </div>
-                <div onclick="showSection('sales')" class="nav-item flex items-center gap-x-4 px-5 py-3.5 text-slate-700 hover:bg-slate-100 rounded-2xl cursor-pointer" id="nav-sales">
-                    <i class="fa-solid fa-shopping-cart w-5 text-lg"></i> <span class="font-medium">销售订单</span>
-                </div>
-                <div onclick="showSection('customers')" class="nav-item flex items-center gap-x-4 px-5 py-3.5 text-slate-700 hover:bg-slate-100 rounded-2xl cursor-pointer" id="nav-customers">
-                    <i class="fa-solid fa-users w-5 text-lg"></i> <span class="font-medium">客户管理</span>
-                </div>
-                <div onclick="showSection('suppliers')" class="nav-item flex items-center gap-x-4 px-5 py-3.5 text-slate-700 hover:bg-slate-100 rounded-2xl cursor-pointer" id="nav-suppliers">
-                    <i class="fa-solid fa-handshake w-5 text-lg"></i> <span class="font-medium">供应商管理</span>
-                </div>
-                <div onclick="showSection('reports')" class="nav-item flex items-center gap-x-4 px-5 py-3.5 text-slate-700 hover:bg-slate-100 rounded-2xl cursor-pointer" id="nav-reports">
-                    <i class="fa-solid fa-chart-line w-5 text-lg"></i> <span class="font-medium">报表中心</span>
-                </div>
+                <div onclick="showSection('dashboard')" class="nav-item flex items-center gap-x-4 px-5 py-3.5 text-slate-700 hover:bg-slate-100 rounded-2xl cursor-pointer nav-active" id="nav-dashboard"><i class="fa-solid fa-tachometer-alt w-5 text-lg"></i> <span class="font-medium">仪表盘</span></div>
+                <div onclick="showSection('products')" class="nav-item flex items-center gap-x-4 px-5 py-3.5 text-slate-700 hover:bg-slate-100 rounded-2xl cursor-pointer" id="nav-products"><i class="fa-solid fa-boxes w-5 text-lg"></i> <span class="font-medium">产品管理</span></div>
+                <div onclick="showSection('inventory')" class="nav-item flex items-center gap-x-4 px-5 py-3.5 text-slate-700 hover:bg-slate-100 rounded-2xl cursor-pointer" id="nav-inventory"><i class="fa-solid fa-warehouse w-5 text-lg"></i> <span class="font-medium">库存管理</span></div>
+                <div onclick="showSection('sales')" class="nav-item flex items-center gap-x-4 px-5 py-3.5 text-slate-700 hover:bg-slate-100 rounded-2xl cursor-pointer" id="nav-sales"><i class="fa-solid fa-shopping-cart w-5 text-lg"></i> <span class="font-medium">销售订单</span></div>
+                <div onclick="showSection('certificates')" class="nav-item flex items-center gap-x-4 px-5 py-3.5 text-slate-700 hover:bg-slate-100 rounded-2xl cursor-pointer" id="nav-certificates"><i class="fa-solid fa-file-medical w-5 text-lg"></i> <span class="font-medium">注册证管理</span></div>
+                <div onclick="showSection('customers')" class="nav-item flex items-center gap-x-4 px-5 py-3.5 text-slate-700 hover:bg-slate-100 rounded-2xl cursor-pointer" id="nav-customers"><i class="fa-solid fa-users w-5 text-lg"></i> <span class="font-medium">客户管理</span></div>
+                <div onclick="showSection('suppliers')" class="nav-item flex items-center gap-x-4 px-5 py-3.5 text-slate-700 hover:bg-slate-100 rounded-2xl cursor-pointer" id="nav-suppliers"><i class="fa-solid fa-handshake w-5 text-lg"></i> <span class="font-medium">供应商管理</span></div>
+                <div onclick="showSection('reports')" class="nav-item flex items-center gap-x-4 px-5 py-3.5 text-slate-700 hover:bg-slate-100 rounded-2xl cursor-pointer" id="nav-reports"><i class="fa-solid fa-chart-line w-5 text-lg"></i> <span class="font-medium">报表中心</span></div>
             </div>
             <div class="mt-10 px-5 text-xs text-slate-400 font-medium">系统</div>
-            <div onclick="showSection('settings')" class="mt-1 flex items-center gap-x-4 px-5 py-3 text-sm text-slate-600 hover:bg-slate-100 rounded-2xl cursor-pointer">
-                <i class="fa-solid fa-cog w-4"></i> <span>系统设置</span>
-            </div>
+            <div onclick="showSection('settings')" class="mt-1 flex items-center gap-x-4 px-5 py-3 text-sm text-slate-600 hover:bg-slate-100 rounded-2xl cursor-pointer"><i class="fa-solid fa-cog w-4"></i> <span>系统设置</span></div>
         </div>
 
-        <!-- Main Content -->
         <div class="flex-1 p-8 max-w-[1400px]">
-            
             <!-- DASHBOARD -->
             <div id="dashboard" class="section active">
-                <div class="flex justify-between items-end mb-8">
-                    <div>
-                        <h1 class="text-4xl font-bold tracking-tight">欢迎回来，张总监</h1>
-                        <p class="text-slate-500 mt-2">今天是 2026年5月15日 · 医疗耗材智能工厂</p>
-                    </div>
-                    <button onclick="refreshDashboard()" class="px-6 py-3 bg-white border rounded-2xl text-sm flex items-center gap-x-2 hover:bg-slate-50">
-                        <i class="fa-solid fa-sync-alt"></i> <span>刷新数据</span>
-                    </button>
-                </div>
-
+                <div class="flex justify-between items-end mb-8"><div><h1 class="text-4xl font-bold tracking-tight">欢迎回来，张总监</h1><p class="text-slate-500 mt-2">今天是 2026年5月15日 · 医疗耗材智能工厂</p></div><button onclick="refreshDashboard()" class="px-6 py-3 bg-white border rounded-2xl text-sm flex items-center gap-x-2 hover:bg-slate-50"><i class="fa-solid fa-sync-alt"></i> <span>刷新数据</span></button></div>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                    <div class="erp-card bg-white p-7 rounded-3xl border">
-                        <div class="flex justify-between">
-                            <div>
-                                <div class="text-sm text-slate-500">本月销售额</div>
-                                <div id="kpi-sales" class="text-4xl font-bold mt-3">¥1,284,600</div>
-                            </div>
-                            <div class="w-14 h-14 bg-emerald-100 rounded-2xl flex items-center justify-center"><i class="fa-solid fa-yen-sign text-emerald-600 text-3xl"></i></div>
-                        </div>
-                        <div class="mt-5 text-emerald-600 text-sm flex items-center"><i class="fa-solid fa-arrow-up mr-1.5"></i> +18.4% 较上月</div>
-                    </div>
-                    <div class="erp-card bg-white p-7 rounded-3xl border">
-                        <div class="flex justify-between">
-                            <div>
-                                <div class="text-sm text-slate-500">库存价值</div>
-                                <div id="kpi-inventory" class="text-4xl font-bold mt-3">¥3,872,450</div>
-                            </div>
-                            <div class="w-14 h-14 bg-sky-100 rounded-2xl flex items-center justify-center"><i class="fa-solid fa-boxes text-sky-600 text-3xl"></i></div>
-                        </div>
-                        <div class="mt-5 text-sky-600 text-sm">12,458 件在库</div>
-                    </div>
-                    <div class="erp-card bg-white p-7 rounded-3xl border">
-                        <div class="flex justify-between">
-                            <div>
-                                <div class="text-sm text-slate-500">待处理订单</div>
-                                <div id="kpi-orders" class="text-4xl font-bold mt-3">47</div>
-                            </div>
-                            <div class="w-14 h-14 bg-amber-100 rounded-2xl flex items-center justify-center"><i class="fa-solid fa-clock text-amber-600 text-3xl"></i></div>
-                        </div>
-                        <div class="mt-5 text-amber-600 text-sm">9 个高优先级</div>
-                    </div>
-                    <div class="erp-card bg-white p-7 rounded-3xl border">
-                        <div class="flex justify-between">
-                            <div>
-                                <div class="text-sm text-slate-500">低库存预警</div>
-                                <div id="kpi-lowstock" class="text-4xl font-bold mt-3 text-red-600">8</div>
-                            </div>
-                            <div class="w-14 h-14 bg-red-100 rounded-2xl flex items-center justify-center"><i class="fa-solid fa-exclamation-triangle text-red-600 text-3xl"></i></div>
-                        </div>
-                        <div class="mt-5 text-red-600 text-sm">需立即补货</div>
-                    </div>
+                    <div class="erp-card bg-white p-7 rounded-3xl border"><div class="flex justify-between"><div><div class="text-sm text-slate-500">本月销售额</div><div id="kpi-sales" class="text-4xl font-bold mt-3">¥1,284,600</div></div><div class="w-14 h-14 bg-emerald-100 rounded-2xl flex items-center justify-center"><i class="fa-solid fa-yen-sign text-emerald-600 text-3xl"></i></div></div><div class="mt-5 text-emerald-600 text-sm flex items-center"><i class="fa-solid fa-arrow-up mr-1.5"></i> +18.4% 较上月</div></div>
+                    <div class="erp-card bg-white p-7 rounded-3xl border"><div class="flex justify-between"><div><div class="text-sm text-slate-500">库存价值</div><div id="kpi-inventory" class="text-4xl font-bold mt-3">¥3,872,450</div></div><div class="w-14 h-14 bg-sky-100 rounded-2xl flex items-center justify-center"><i class="fa-solid fa-boxes text-sky-600 text-3xl"></i></div></div><div class="mt-5 text-sky-600 text-sm">12,458 件在库</div></div>
+                    <div class="erp-card bg-white p-7 rounded-3xl border"><div class="flex justify-between"><div><div class="text-sm text-slate-500">待处理订单</div><div id="kpi-orders" class="text-4xl font-bold mt-3">47</div></div><div class="w-14 h-14 bg-amber-100 rounded-2xl flex items-center justify-center"><i class="fa-solid fa-clock text-amber-600 text-3xl"></i></div></div><div class="mt-5 text-amber-600 text-sm">9 个高优先级</div></div>
+                    <div class="erp-card bg-white p-7 rounded-3xl border"><div class="flex justify-between"><div><div class="text-sm text-slate-500">低库存预警</div><div id="kpi-lowstock" class="text-4xl font-bold mt-3 text-red-600">8</div></div><div class="w-14 h-14 bg-red-100 rounded-2xl flex items-center justify-center"><i class="fa-solid fa-exclamation-triangle text-red-600 text-3xl"></i></div></div><div class="mt-5 text-red-600 text-sm">需立即补货</div></div>
                 </div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
-                    <div class="lg:col-span-3 bg-white rounded-3xl border p-7">
-                        <div class="flex justify-between items-center mb-5"><div class="font-semibold text-xl">近30天销售趋势</div></div>
-                        <canvas id="salesChart" height="115"></canvas>
-                    </div>
-                    <div class="lg:col-span-2 bg-white rounded-3xl border p-7">
-                        <div class="font-semibold text-xl mb-5">库存品类分布</div>
-                        <canvas id="categoryChart" height="115"></canvas>
-                    </div>
-                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-5 gap-6"><div class="lg:col-span-3 bg-white rounded-3xl border p-7"><div class="flex justify-between items-center mb-5"><div class="font-semibold text-xl">近30天销售趋势</div></div><canvas id="salesChart" height="115"></canvas></div><div class="lg:col-span-2 bg-white rounded-3xl border p-7"><div class="font-semibold text-xl mb-5">库存品类分布</div><canvas id="categoryChart" height="115"></canvas></div></div>
             </div>
 
             <!-- PRODUCTS -->
             <div id="products" class="section">
-                <div class="flex items-center justify-between mb-6">
-                    <div>
-                        <h2 class="text-3xl font-bold">产品管理</h2>
-                        <p class="text-slate-500">共 <span id="product-count">128</span> 个SKU</p>
-                    </div>
-                    <button onclick="showAddProductModal()" class="px-6 py-3.5 bg-sky-600 hover:bg-sky-700 text-white rounded-2xl flex items-center gap-x-3 text-sm font-medium">
-                        <i class="fa-solid fa-plus"></i> <span>新增产品</span>
-                    </button>
-                </div>
-                <div class="bg-white rounded-3xl border overflow-hidden">
-                    <div class="p-5 border-b flex gap-x-4">
-                        <input id="product-search" onkeyup="filterProducts()" placeholder="搜索产品名称或规格..." class="flex-1 border rounded-2xl px-5 py-3 text-sm">
-                        <select id="category-filter" onchange="filterProducts()" class="border rounded-2xl px-5 py-3 text-sm">
-                            <option value="">全部品类</option>
-                            <option value="防护耗材">防护耗材</option>
-                            <option value="手术耗材">手术耗材</option>
-                            <option value="诊断试剂">诊断试剂</option>
-                        </select>
-                    </div>
-                    <table class="w-full text-sm medical-table">
-                        <thead class="bg-slate-50"><tr class="text-xs text-slate-500"><th class="px-8 py-5 text-left">产品名称</th><th class="px-8 py-5">规格</th><th class="px-8 py-5">品类</th><th class="px-8 py-5 text-right">单价</th><th class="px-8 py-5 text-right">库存</th><th class="px-8 py-5 w-28"></th></tr></thead>
-                        <tbody id="products-table" class="divide-y"></tbody>
-                    </table>
-                </div>
+                <div class="flex items-center justify-between mb-6"><div><h2 class="text-3xl font-bold">产品管理</h2><p class="text-slate-500">共 <span id="product-count">128</span> 个SKU</p></div><button onclick="showAddProductModal()" class="px-6 py-3.5 bg-sky-600 hover:bg-sky-700 text-white rounded-2xl flex items-center gap-x-3 text-sm font-medium"><i class="fa-solid fa-plus"></i> <span>新增产品</span></button></div>
+                <div class="bg-white rounded-3xl border overflow-hidden"><div class="p-5 border-b flex gap-x-4"><input id="product-search" onkeyup="filterProducts()" placeholder="搜索产品名称或规格..." class="flex-1 border rounded-2xl px-5 py-3 text-sm"><select id="category-filter" onchange="filterProducts()" class="border rounded-2xl px-5 py-3 text-sm"><option value="">全部品类</option><option value="防护耗材">防护耗材</option><option value="手术耗材">手术耗材</option><option value="诊断试剂">诊断试剂</option></select></div><table class="w-full text-sm medical-table"><thead class="bg-slate-50"><tr class="text-xs text-slate-500"><th class="px-8 py-5 text-left">产品名称</th><th class="px-8 py-5">规格</th><th class="px-8 py-5">品类</th><th class="px-8 py-5 text-right">单价</th><th class="px-8 py-5 text-right">库存</th><th class="px-8 py-5 w-28"></th></tr></thead><tbody id="products-table" class="divide-y"></tbody></table></div>
             </div>
 
             <!-- INVENTORY -->
-            <div id="inventory" class="section">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-3xl font-bold">库存管理</h2>
-                    <button onclick="showAdjustStockModal()" class="px-6 py-3.5 bg-emerald-600 text-white rounded-2xl text-sm flex items-center gap-x-3">
-                        <i class="fa-solid fa-exchange-alt"></i> <span>库存调整</span>
-                    </button>
-                </div>
-                <div class="bg-white rounded-3xl border p-8" id="inventory-content"></div>
-            </div>
+            <div id="inventory" class="section"><div class="flex justify-between items-center mb-6"><h2 class="text-3xl font-bold">库存管理</h2><button onclick="showAdjustStockModal()" class="px-6 py-3.5 bg-emerald-600 text-white rounded-2xl text-sm flex items-center gap-x-3"><i class="fa-solid fa-exchange-alt"></i> <span>库存调整</span></button></div><div class="bg-white rounded-3xl border p-8" id="inventory-content"></div></div>
 
             <!-- SALES -->
-            <div id="sales" class="section">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-3xl font-bold">销售订单</h2>
-                    <button onclick="showCreateOrderModal()" class="px-6 py-3.5 bg-sky-600 text-white rounded-2xl text-sm flex items-center gap-x-3">
-                        <i class="fa-solid fa-plus"></i> <span>新建销售订单</span>
-                    </button>
-                </div>
-                <div class="bg-white rounded-3xl border overflow-hidden">
-                    <table class="w-full text-sm"><thead class="bg-slate-50"><tr class="text-xs text-slate-500"><th class="px-8 py-5 text-left">订单号</th><th class="px-8 py-5">客户</th><th class="px-8 py-5 text-right">金额</th><th class="px-8 py-5">状态</th><th class="px-8 py-5 w-24"></th></tr></thead>
-                    <tbody id="sales-table" class="divide-y"></tbody>
-                </table>
-                </div>
+            <div id="sales" class="section"><div class="flex justify-between items-center mb-6"><h2 class="text-3xl font-bold">销售订单</h2><button onclick="showCreateOrderModal()" class="px-6 py-3.5 bg-sky-600 text-white rounded-2xl text-sm flex items-center gap-x-3"><i class="fa-solid fa-plus"></i> <span>新建销售订单</span></button></div><div class="bg-white rounded-3xl border overflow-hidden"><table class="w-full text-sm"><thead class="bg-slate-50"><tr class="text-xs text-slate-500"><th class="px-8 py-5 text-left">订单号</th><th class="px-8 py-5">客户</th><th class="px-8 py-5 text-right">金额</th><th class="px-8 py-5">状态</th><th class="px-8 py-5 w-24"></th></tr></thead><tbody id="sales-table" class="divide-y"></tbody></table></div></div>
+
+            <!-- CERTIFICATES (NEW) -->
+            <div id="certificates" class="section">
+                <div class="flex items-center justify-between mb-6"><div><h2 class="text-3xl font-bold">注册证管理</h2><p class="text-slate-500">医疗器械注册证</p></div><button onclick="showAddCertificateModal()" class="px-6 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl flex items-center gap-x-3 text-sm font-medium"><i class="fa-solid fa-plus"></i> <span>新增注册证</span></button></div>
+                <div class="bg-white rounded-3xl border overflow-hidden"><table class="w-full text-sm medical-table"><thead class="bg-slate-50"><tr class="text-xs text-slate-500"><th class="px-8 py-5 text-left">注册证号</th><th class="px-8 py-5">持证企业</th><th class="px-8 py-5">有效期至</th><th class="px-8 py-5 w-28"></th></tr></thead><tbody id="certificates-table" class="divide-y"></tbody></table></div>
             </div>
 
             <!-- CUSTOMERS -->
-            <div id="customers" class="section">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-3xl font-bold">客户管理</h2>
-                    <button onclick="showAddCustomerModal()" class="px-6 py-3.5 bg-violet-600 text-white rounded-2xl text-sm flex items-center gap-x-3">
-                        <i class="fa-solid fa-user-plus"></i> <span>新增客户</span>
-                    </button>
-                </div>
-                <div class="bg-white rounded-3xl border p-8"><div id="customers-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div></div>
-            </div>
+            <div id="customers" class="section"><div class="flex justify-between items-center mb-6"><h2 class="text-3xl font-bold">客户管理</h2><button onclick="showAddCustomerModal()" class="px-6 py-3.5 bg-violet-600 text-white rounded-2xl text-sm flex items-center gap-x-3"><i class="fa-solid fa-user-plus"></i> <span>新增客户</span></button></div><div class="bg-white rounded-3xl border p-8"><div id="customers-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div></div></div>
 
             <!-- SUPPLIERS -->
-            <div id="suppliers" class="section">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-3xl font-bold">供应商管理</h2>
-                    <button onclick="showAddSupplierModal()" class="px-6 py-3.5 bg-amber-600 text-white rounded-2xl text-sm flex items-center gap-x-3">
-                        <i class="fa-solid fa-plus"></i> <span>新增供应商</span>
-                    </button>
-                </div>
-                <div class="bg-white rounded-3xl border p-8"><div id="suppliers-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div></div>
-            </div>
+            <div id="suppliers" class="section"><div class="flex justify-between items-center mb-6"><h2 class="text-3xl font-bold">供应商管理</h2><button onclick="showAddSupplierModal()" class="px-6 py-3.5 bg-amber-600 text-white rounded-2xl text-sm flex items-center gap-x-3"><i class="fa-solid fa-plus"></i> <span>新增供应商</span></button></div><div class="bg-white rounded-3xl border p-8"><div id="suppliers-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div></div></div>
 
             <!-- REPORTS -->
-            <div id="reports" class="section">
-                <h2 class="text-3xl font-bold mb-8">报表中心</h2>
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="bg-white rounded-3xl border p-8">
-                        <div class="font-semibold mb-5">销售TOP 5 产品</div>
-                        <div id="top-products" class="space-y-3"></div>
-                    </div>
-                    <div class="bg-white rounded-3xl border p-8">
-                        <div class="font-semibold mb-5">月度销售对比</div>
-                        <canvas id="monthlyChart" height="130"></canvas>
-                    </div>
-                </div>
-            </div>
+            <div id="reports" class="section"><h2 class="text-3xl font-bold mb-8">报表中心</h2><div class="grid grid-cols-1 lg:grid-cols-2 gap-6"><div class="bg-white rounded-3xl border p-8"><div class="font-semibold mb-5">销售TOP 5 产品</div><div id="top-products" class="space-y-3"></div></div><div class="bg-white rounded-3xl border p-8"><div class="font-semibold mb-5">月度销售对比</div><canvas id="monthlyChart" height="130"></canvas></div></div></div>
 
             <!-- SETTINGS -->
-            <div id="settings" class="section">
-                <h2 class="text-3xl font-bold mb-8">系统设置</h2>
-                <div class="max-w-xl bg-white rounded-3xl border p-9">
-                    <div class="space-y-7">
-                        <div>
-                            <label class="block text-sm font-medium mb-2">公司名称</label>
-                            <input value="华康医疗耗材有限公司" class="w-full border rounded-2xl px-5 py-3.5">
-                        </div>
-                        <div class="grid grid-cols-2 gap-6">
-                            <div>
-                                <label class="block text-sm font-medium mb-2">安全库存预警天数</label>
-                                <input type="number" value="15" class="w-full border rounded-2xl px-5 py-3.5">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium mb-2">默认货币</label>
-                                <select class="w-full border rounded-2xl px-5 py-3.5"><option>人民币 (CNY)</option></select>
-                            </div>
-                        </div>
-                        <button onclick="alert('设置已保存（演示版）')" class="mt-4 px-10 py-3.5 bg-sky-600 text-white rounded-2xl font-medium">保存设置</button>
-                    </div>
-                </div>
-            </div>
+            <div id="settings" class="section"><h2 class="text-3xl font-bold mb-8">系统设置</h2><div class="max-w-xl bg-white rounded-3xl border p-9"><div class="space-y-7"><div><label class="block text-sm font-medium mb-2">公司名称</label><input value="华康医疗耗材有限公司" class="w-full border rounded-2xl px-5 py-3.5"></div><div class="grid grid-cols-2 gap-6"><div><label class="block text-sm font-medium mb-2">安全库存预警天数</label><input type="number" value="15" class="w-full border rounded-2xl px-5 py-3.5"></div><div><label class="block text-sm font-medium mb-2">默认货币</label><select class="w-full border rounded-2xl px-5 py-3.5"><option>人民币 (CNY)</option></select></div></div><button onclick="alert('设置已保存（演示版）')" class="mt-4 px-10 py-3.5 bg-sky-600 text-white rounded-2xl font-medium">保存设置</button></div></div></div>
         </div>
     </div>
 
-    <!-- Modal -->
-    <div id="modal" onclick="if(event.target.id==='modal') hideModal()" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center z-[100]">
-        <div onclick="event.stopImmediatePropagation()" class="bg-white rounded-3xl w-full max-w-lg mx-4 shadow-2xl" id="modal-content"></div>
-    </div>
+    <div id="modal" onclick="if(event.target.id==='modal') hideModal()" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center z-[100]"><div onclick="event.stopImmediatePropagation()" class="bg-white rounded-3xl w-full max-w-lg mx-4 shadow-2xl" id="modal-content"></div></div>
 
     <script>
-        let data = { products: [], salesOrders: [], customers: [], suppliers: [], inventoryLogs: [] };
+        let data = { products: [], salesOrders: [], customers: [], suppliers: [], inventoryLogs: [], certificates: [] };
 
-        function initTailwind() {
-            tailwind.config = { theme: { extend: { fontFamily: { 'sans': ['Inter', 'Noto Sans SC', 'system-ui'] } } } };
-        }
+        function initTailwind() { tailwind.config = { theme: { extend: { fontFamily: { 'sans': ['Inter', 'Noto Sans SC', 'system-ui'] } } } }; }
 
         function loadData() {
             const saved = localStorage.getItem('erp_v0.3_medical_full');
-            if (saved) {
-                data = JSON.parse(saved);
-            } else {
+            if (saved) { data = JSON.parse(saved); }
+            else {
                 data.products = [
                     {id:1, name:"医用外科口罩", category:"防护耗材", spec:"50只/盒", price:28.5, stock:1250, safetyStock:300},
                     {id:2, name:"一次性丁腈手套", category:"防护耗材", spec:"100只/盒", price:45, stock:890, safetyStock:200},
@@ -293,24 +122,18 @@
                     {id:4, name:"无菌纱布块", category:"手术耗材", spec:"10×10cm 50片", price:18.8, stock:680, safetyStock:150},
                     {id:5, name:"新冠抗原检测试剂", category:"诊断试剂", spec:"25人份/盒", price:125, stock:320, safetyStock:80}
                 ];
-                data.customers = [
-                    {id:1, name:"北京协和医院", contact:"李主任", phone:"010-6915xxxx", address:"北京市东城区"},
-                    {id:2, name:"上海瑞金医院", contact:"王护士长", phone:"021-6437xxxx", address:"上海市黄浦区"}
+                data.customers = [{id:1, name:"北京协和医院", contact:"李主任", phone:"010-6915xxxx", address:"北京市东城区"},{id:2, name:"上海瑞金医院", contact:"王护士长", phone:"021-6437xxxx", address:"上海市黄浦区"}];
+                data.suppliers = [{id:1, name:"江苏医疗材料有限公司", contact:"陈经理", phone:"0512-8888xxxx"}];
+                data.salesOrders = [{id:"SO-202605-001", customerId:1, date:"2026-05-10", total:8560, status:"已发货", items:[]}];
+                data.certificates = [
+                    {id:1, certNo: "国械注准20263000001", holder: "华康医疗耗材有限公司", expiry: "2028-12-31"},
+                    {id:2, certNo: "国械注准20263000012", holder: "华康医疗耗材有限公司", expiry: "2027-06-30"}
                 ];
-                data.suppliers = [
-                    {id:1, name:"江苏医疗材料有限公司", contact:"陈经理", phone:"0512-8888xxxx"}
-                ];
-                data.salesOrders = [
-                    {id:"SO-202605-001", customerId:1, date:"2026-05-10", total:8560, status:"已发货", items:[]}
-                ];
-                data.inventoryLogs = [];
                 saveData();
             }
         }
 
-        function saveData() {
-            localStorage.setItem('erp_v0.3_medical_full', JSON.stringify(data));
-        }
+        function saveData() { localStorage.setItem('erp_v0.3_medical_full', JSON.stringify(data)); }
 
         function showSection(section) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -322,6 +145,7 @@
             if (section === 'products') renderProducts();
             if (section === 'inventory') renderInventory();
             if (section === 'sales') renderSalesOrders();
+            if (section === 'certificates') renderCertificates();
             if (section === 'customers') renderCustomers();
             if (section === 'suppliers') renderSuppliers();
             if (section === 'reports') renderReports();
@@ -334,14 +158,7 @@
             list.forEach(p => {
                 const tr = document.createElement('tr');
                 tr.className = 'medical-table';
-                tr.innerHTML = `
-                    <td class="px-8 py-5 font-medium">${p.name}</td>
-                    <td class="px-8 py-5 text-slate-600">${p.spec}</td>
-                    <td class="px-8 py-5"><span class="px-3 py-1 text-xs rounded-full bg-sky-100 text-sky-700">${p.category}</span></td>
-                    <td class="px-8 py-5 text-right font-mono">¥${p.price}</td>
-                    <td class="px-8 py-5 text-right font-semibold ${p.stock < p.safetyStock ? 'text-red-600' : ''}">${p.stock}</td>
-                    <td class="px-8 py-5"><button onclick="editProduct(${p.id})" class="text-sky-600 text-xs px-4 py-2">编辑</button> <button onclick="deleteProduct(${p.id})" class="text-red-500 text-xs px-4 py-2">删除</button></td>
-                `;
+                tr.innerHTML = `<td class="px-8 py-5 font-medium">${p.name}</td><td class="px-8 py-5 text-slate-600">${p.spec}</td><td class="px-8 py-5"><span class="px-3 py-1 text-xs rounded-full bg-sky-100 text-sky-700">${p.category}</span></td><td class="px-8 py-5 text-right font-mono">¥${p.price}</td><td class="px-8 py-5 text-right font-semibold ${p.stock < p.safetyStock ? 'text-red-600' : ''}">${p.stock}</td><td class="px-8 py-5"><button onclick="editProduct(${p.id})" class="text-sky-600 text-xs px-4 py-2">编辑</button> <button onclick="deleteProduct(${p.id})" class="text-red-500 text-xs px-4 py-2">删除</button></td>`;
                 tbody.appendChild(tr);
             });
             document.getElementById('product-count').textContent = data.products.length;
@@ -362,15 +179,7 @@
         }
 
         function addProduct() {
-            const p = {
-                id: Date.now(),
-                name: document.getElementById('p-name').value || '新产品',
-                category: document.getElementById('p-cat').value,
-                spec: document.getElementById('p-spec').value || '标准',
-                price: parseFloat(document.getElementById('p-price').value) || 10,
-                stock: parseInt(document.getElementById('p-stock').value) || 100,
-                safetyStock: parseInt(document.getElementById('p-safety').value) || 50
-            };
+            const p = {id: Date.now(), name: document.getElementById('p-name').value || '新产品', category: document.getElementById('p-cat').value, spec: document.getElementById('p-spec').value || '标准', price: parseFloat(document.getElementById('p-price').value) || 10, stock: parseInt(document.getElementById('p-stock').value) || 100, safetyStock: parseInt(document.getElementById('p-safety').value) || 50};
             data.products.push(p);
             saveData();
             hideModal();
@@ -516,6 +325,70 @@
             updateKPIs();
         }
 
+        // ==================== 注册证管理 (NEW) ====================
+        function renderCertificates() {
+            const tbody = document.getElementById('certificates-table');
+            tbody.innerHTML = '';
+            data.certificates.forEach(c => {
+                const tr = document.createElement('tr');
+                tr.className = 'medical-table';
+                tr.innerHTML = `
+                    <td class="px-8 py-5 font-mono text-emerald-700">${c.certNo}</td>
+                    <td class="px-8 py-5">${c.holder}</td>
+                    <td class="px-8 py-5"><span class="px-3 py-1 text-xs rounded-full bg-emerald-100 text-emerald-700">${c.expiry}</span></td>
+                    <td class="px-8 py-5"><button onclick="editCertificate(${c.id})" class="text-sky-600 text-xs px-4 py-2">编辑</button> <button onclick="deleteCertificate(${c.id})" class="text-red-500 text-xs px-4 py-2">删除</button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function showAddCertificateModal() {
+            const html = `<div class="p-8"><h3 class="text-2xl font-bold mb-7">新增注册证</h3><div class="space-y-5"><div><label class="block text-sm mb-2">注册证号</label><input id="cert-no" class="w-full border rounded-2xl px-5 py-3.5" placeholder="例：国械注准20263000001"></div><div><label class="block text-sm mb-2">持证企业</label><input id="cert-holder" class="w-full border rounded-2xl px-5 py-3.5" placeholder="华康医疗耗材有限公司"></div><div><label class="block text-sm mb-2">有效期至</label><input id="cert-expiry" type="date" class="w-full border rounded-2xl px-5 py-3.5"></div></div><div class="flex gap-x-4 mt-9"><button onclick="hideModal()" class="flex-1 py-3.5 border rounded-2xl">取消</button><button onclick="addCertificate()" class="flex-1 py-3.5 bg-emerald-600 text-white rounded-2xl">保存注册证</button></div></div>`;
+            document.getElementById('modal-content').innerHTML = html;
+            document.getElementById('modal').classList.remove('hidden');
+            document.getElementById('modal').classList.add('flex');
+        }
+
+        function addCertificate() {
+            const cert = {
+                id: Date.now(),
+                certNo: document.getElementById('cert-no').value || '新注册证',
+                holder: document.getElementById('cert-holder').value || '未知企业',
+                expiry: document.getElementById('cert-expiry').value || '2028-12-31'
+            };
+            data.certificates.push(cert);
+            saveData();
+            hideModal();
+            renderCertificates();
+        }
+
+        function editCertificate(id) {
+            const c = data.certificates.find(x => x.id === id);
+            if (!c) return;
+            const html = `<div class="p-8"><h3 class="text-2xl font-bold mb-7">编辑注册证</h3><div class="space-y-5"><div><label class="block text-sm mb-2">注册证号</label><input id="cert-no" class="w-full border rounded-2xl px-5 py-3.5" value="${c.certNo}"></div><div><label class="block text-sm mb-2">持证企业</label><input id="cert-holder" class="w-full border rounded-2xl px-5 py-3.5" value="${c.holder}"></div><div><label class="block text-sm mb-2">有效期至</label><input id="cert-expiry" type="date" class="w-full border rounded-2xl px-5 py-3.5" value="${c.expiry}"></div></div><div class="flex gap-x-4 mt-9"><button onclick="hideModal()" class="flex-1 py-3.5 border rounded-2xl">取消</button><button onclick="updateCertificate(${id})" class="flex-1 py-3.5 bg-emerald-600 text-white rounded-2xl">保存修改</button></div></div>`;
+            document.getElementById('modal-content').innerHTML = html;
+            document.getElementById('modal').classList.remove('hidden');
+            document.getElementById('modal').classList.add('flex');
+        }
+
+        function updateCertificate(id) {
+            const c = data.certificates.find(x => x.id === id);
+            if (!c) return;
+            c.certNo = document.getElementById('cert-no').value;
+            c.holder = document.getElementById('cert-holder').value;
+            c.expiry = document.getElementById('cert-expiry').value;
+            saveData();
+            hideModal();
+            renderCertificates();
+        }
+
+        function deleteCertificate(id) {
+            if (!confirm('确定删除这个注册证吗？')) return;
+            data.certificates = data.certificates.filter(x => x.id !== id);
+            saveData();
+            renderCertificates();
+        }
+
         function renderCustomers() {
             const container = document.getElementById('customers-list');
             container.innerHTML = '';
@@ -578,12 +451,7 @@
                 div.innerHTML = `<div class="flex items-center gap-x-3"><div class="w-6 h-6 bg-sky-100 text-sky-600 rounded-full flex items-center justify-center text-xs font-bold">${i+1}</div><div>${p.name}</div></div><div class="font-mono text-sm">${p.stock} 件</div>`;
                 container.appendChild(div);
             });
-
-            new Chart(document.getElementById('monthlyChart'), {
-                type: 'bar',
-                data: { labels: ['1月','2月','3月','4月','5月'], datasets: [{ label: '销售额', data: [820,765,943,1120,1284], backgroundColor: '#0ea5e9' }] },
-                options: { responsive: true, plugins: { legend: { display: false } } }
-            });
+            new Chart(document.getElementById('monthlyChart'), { type: 'bar', data: { labels: ['1月','2月','3月','4月','5月'], datasets: [{ label: '销售额', data: [820,765,943,1120,1284], backgroundColor: '#0ea5e9' }] }, options: { responsive: true, plugins: { legend: { display: false } } } });
         }
 
         function updateKPIs() {
@@ -627,11 +495,11 @@
             showSection('dashboard');
             initCharts();
             updateKPIs();
-            console.log('%c[ERP-online 0.3] 完整医疗耗材ERP原型已加载', 'color:#0ea5e9');
+            console.log('%c[ERP-online 0.3] 注册证管理模块已添加', 'color:#0ea5e9');
             setTimeout(() => {
                 const t = document.createElement('div');
                 t.className = 'fixed bottom-6 right-6 bg-white shadow-xl border px-6 py-4 rounded-2xl flex items-center gap-x-3 text-sm';
-                t.innerHTML = `<div><i class="fa-solid fa-check-circle text-emerald-600 mr-2"></i> v0.3 完整版已就绪 · 数据已保存到浏览器</div>`;
+                t.innerHTML = `<div><i class="fa-solid fa-check-circle text-emerald-600 mr-2"></i> 注册证管理已上线！</div>`;
                 document.body.appendChild(t);
                 setTimeout(() => t.remove(), 2800);
             }, 1200);
